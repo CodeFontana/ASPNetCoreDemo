@@ -1,0 +1,56 @@
+﻿@page
+@model RPDemo.Pages.Orders.DisplayModel
+@{
+}
+
+<h1>Display</h1>
+
+@if (Model.Order is null)
+{
+    <h4>The requested record was not found.</h4>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><strong>Order Name</strong></td>
+                <td>@Model.Order.OrderName</td>
+            </tr>
+            <tr>
+                <td><strong>Order Date</strong></td>
+                <td>@Model.Order.OrderDate</td>
+            </tr>
+            <tr>
+                <td><strong>Order Total</strong></td>
+                <td>@string.Format("{0:C}", Model.Order.Total)</td>
+            </tr>
+            <tr>
+                <td><strong>Item Ordered</strong></td>
+                <td>@Model.ItemPurchased</td>
+            </tr>
+            <tr>
+                <td><strong>Quantity</strong></td>
+                <td>@Model.Order.Quantity</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a asp-page="./Delete" asp-route-id="@Model.Order.Id" class="btn btn-danger">Delete Order</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="UpdateModel.Id" value="@Model.Order.Id" type="hidden" />
+        <div class="form-group">
+            <label asp-for="UpdateModel.OrderName" class="control-label"></label>
+            <input asp-for="UpdateModel.OrderName" value="@Model.Order.OrderName" class="form-control" />
+            <span asp-validation-for="UpdateModel.OrderName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Update Order Name" class="btn btn-primary" />
+        </div>
+    </form>
+}

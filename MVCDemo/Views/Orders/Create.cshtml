@@ -1,0 +1,41 @@
+﻿@model MVCDemo.Models.OrderCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>OrderCreateModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Order.FoodId" class="control-label"></label>
+                <select asp-for="Order.FoodId" asp-items="Model.FoodItems" class="form-control"></select>
+                <span asp-validation-for="Order.FoodId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Order.Quantity" class="control-label"></label>
+                <input asp-for="Order.Quantity" class="form-control" />
+                <span asp-validation-for="Order.Quantity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Order.OrderName" class="control-label"></label>
+                <input asp-for="Order.OrderName" class="form-control" />
+                <span asp-validation-for="Order.OrderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

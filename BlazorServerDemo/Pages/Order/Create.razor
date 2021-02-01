@@ -1,0 +1,69 @@
+﻿@page "/Order/Create"
+@inject IFoodData foodData
+@inject IOrderData orderData
+@inject NavigationManager navMan
+
+<h3>Create</h3>
+
+<EditForm Model="@order" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="@order" />
+    <div class="form-group">
+        <label class="control-label">Item to Order</label>
+        @*<InputSelect @bind-Value="order.FoodId" class="form-control">
+            @foreach (var f in foodItems)
+            {
+                <option value="f.Id">@f.Title</option>
+            }
+        </InputSelect>*@
+        <select @onchange="FoodItemChange" class="form-control">
+            <option value="">Select a meal...</option>
+            @foreach (var f in foodItems)
+            {
+                <option value="@f.Id">@f.Title</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Quantity</label>
+        <InputNumber @bind-Value="order.Quantity" class="form-control" />
+        <ValidationMessage For="@(() => order.Quantity)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Name for the Order</label>
+        <InputText @bind-Value="order.OrderName" class="form-control" />
+        <ValidationMessage For="@(() => order.OrderName)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Order Food" class="btn btn-primary" />
+    </div>
+</EditForm>
+
+@code {
+    private OrderModel order = new OrderModel();
+    private List<FoodModel> foodItems = new List<FoodModel>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        foodItems = await foodData.GetFood();
+    }
+
+    private void FoodItemChange(ChangeEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(e.Value.ToString()) == false)
+        {
+            order.FoodId = int.Parse(e.Value.ToString());
+        }
+        else
+        {
+            order.FoodId = 0;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        order.Total = order.Quantity * foodItems.Where(x => x.Id == order.FoodId).First().Price;
+        int id = await orderData.CreateOrder(order);
+        navMan.NavigateTo($"order/display/{id}");
+    }
+}
