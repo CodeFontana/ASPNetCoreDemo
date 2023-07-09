@@ -67,6 +67,8 @@ else
         {
             errorString = response.ReasonPhrase;
         }
+
+        await base.OnParametersSetAsync();
     }
 
     private void FoodItemChange(ChangeEventArgs e)

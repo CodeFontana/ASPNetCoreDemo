@@ -15,6 +15,7 @@ namespace BlazorServerDemo.Pages.Order
         protected override async Task OnParametersSetAsync()
         {
             foodItems = await foodData.GetFood();
+            await base.OnParametersSetAsync();
         }
 
         private void FoodItemChange(ChangeEventArgs e)
