@@ -1,7 +1,10 @@
 ﻿@page "/Order/Create"
+@rendermode InteractiveServer
 @inject IFoodData foodData
 @inject IOrderData orderData
 @inject NavigationManager navMan
+
+<PageTitle>Create Order - Blazor Server</PageTitle>
 
 <h3>Create</h3>
 
@@ -32,3 +35,33 @@
         <input type="submit" value="Order Food" class="btn btn-primary" />
     </div>
 </EditForm>
+
+@code {
+    private OrderModel order = new OrderModel();
+    private List<FoodModel> foodItems = new List<FoodModel>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        foodItems = await foodData.GetFood();
+        await base.OnParametersSetAsync();
+    }
+
+    private void FoodItemChange(ChangeEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(e.Value.ToString()) == false)
+        {
+            order.FoodId = int.Parse(e.Value.ToString());
+        }
+        else
+        {
+            order.FoodId = 0;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        order.Total = order.Quantity * foodItems.Where(x => x.Id == order.FoodId).First().Price;
+        int id = await orderData.CreateOrder(order);
+        navMan.NavigateTo($"order/display/{id}");
+    }
+}

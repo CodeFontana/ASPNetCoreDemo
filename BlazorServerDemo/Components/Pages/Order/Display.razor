@@ -1,8 +1,11 @@
 ﻿@page "/Order/Display/{Id:int}"
+@rendermode InteractiveServer
 @inject IFoodData foodData
 @inject IOrderData orderData
 @inject NavigationManager navMan
 @using BlazorServerDemo.Models
+
+<PageTitle>Display Order - Blazor Server</PageTitle>
 
 <h3>Display</h3>
 
