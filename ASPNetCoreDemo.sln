@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCDemo", "MVCDemo\MVCDemo.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPDemo", "RPDemo\RPDemo.csproj", "{CC4F8AB1-B1EE-45F1-86F4-9BE8B73DB0CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSSRDemo", "BlazorSSRDemo\BlazorSSRDemo.csproj", "{DF4FB899-2647-421D-A687-6F2327DD9A1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSSRDemo", "BlazorSSRDemo\BlazorSSRDemo.csproj", "{DF4FB899-2647-421D-A687-6F2327DD9A1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
