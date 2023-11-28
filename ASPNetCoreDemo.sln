@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiDemo", "ApiDemo\ApiDemo.csproj", "{BC1479A3-BFEF-40CE-8612-620A4096E423}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCDemo", "MVCDemo\MVCDemo.csproj", "{215219AD-8D26-4546-AD04-15FCAE382B32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPDemo", "RPDemo\RPDemo.csproj", "{CC4F8AB1-B1EE-45F1-86F4-9BE8B73DB0CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSSRDemo", "BlazorSSRDemo\BlazorSSRDemo.csproj", "{DF4FB899-2647-421D-A687-6F2327DD9A1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{CC4F8AB1-B1EE-45F1-86F4-9BE8B73DB0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4F8AB1-B1EE-45F1-86F4-9BE8B73DB0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4F8AB1-B1EE-45F1-86F4-9BE8B73DB0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
