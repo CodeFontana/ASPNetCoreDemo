@@ -1,7 +1,16 @@
 using BlazorSSRDemo.Components;
+using DataLibrary.Data;
+using DataLibrary.Db;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents();
+builder.Services.AddSingleton(new ConnectionStringData
+{
+    SqlConnectionName = "Default"
+});
+builder.Services.AddSingleton<IDataAccess, SqlDb>();
+builder.Services.AddSingleton<IFoodData, FoodData>();
+builder.Services.AddSingleton<IOrderData, OrderData>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() == false)
