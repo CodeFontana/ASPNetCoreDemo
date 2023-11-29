@@ -6,10 +6,11 @@
 
 <p>Current count: @CurrentCount</p>
 
-<EditForm Enhance FormName="counterForm" Model="CurrentCount" OnSubmit="IncrementCount">
-    <InputNumber class="d-none" @bind-Value="CurrentCount" />
+<form data-enhance method="post" @formname="counterForm" @onsubmit="IncrementCount">
+    <AntiforgeryToken />
+    <input type="number" @bind-value="@CurrentCount" name="CurrentCount" hidden />
     <button class="btn btn-primary" type="submit">Click me</button>
-</EditForm>
+</form>
 
 @code {
     [SupplyParameterFromForm]
