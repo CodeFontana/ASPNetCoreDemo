@@ -42,26 +42,14 @@ else
             </tr>
             <tr>
                 <td colspan="2">
-                    @if (confirmDelete)
-                    {
-                        <button class="btn btn-outline-danger" @onclick="HandleDeleteRecord">
-                            Confirm Delete
-                        </button>
-                        <button class="btn btn-secondary" @onclick="(() => confirmDelete = false)">
-                            Cancel
-                        </button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-danger" @onclick="(()=> confirmDelete = true)">
-                            Delete Order
-                        </button>
-                    }
+                    <EditForm Enhance FormName="deleteOrder" Model="updateModel" OnSubmit="() => HandleDeleteOrder()">
+                        <button class="btn btn-danger" type="submit">Delete Order</button>
+                    </EditForm>
                 </td>
             </tr>
         </tbody>
     </table>
-    <EditForm Enhance FormName="updateOrder" Model="updateModel" OnValidSubmit="() => HandleUpdateOrder()">
+    <EditForm Enhance FormName="updateOrder" Model="updateModel" OnValidSubmit="() => HandleUpdateOrderNameAsync()">
         <DataAnnotationsValidator />
         <ValidationSummary Model="updateModel" />
 
@@ -82,7 +70,6 @@ else
 
     private OrderModel? order;
     private string? itemPurchased;
-    private bool confirmDelete = false;
     private bool recordNotFound = false;
 
     [SupplyParameterFromForm]
@@ -96,6 +83,7 @@ else
         {
             var food = await foodData.GetFood();
             itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;
+            updateModel ??= new();
             updateModel.Id = order.Id;
             updateModel.OrderName = updateModel.OrderName ??= order.OrderName;
         }
@@ -105,15 +93,13 @@ else
         }
     }
 
-    private async Task HandleUpdateOrder()
+    private async Task HandleUpdateOrderNameAsync()
     {
         await orderData.UpdateOrderName(updateModel.Id, updateModel.OrderName);
-        StateHasChanged();
     }
 
-    private async Task HandleDeleteRecord()
+    private void HandleDeleteOrder()
     {
-        await orderData.DeleteOrder(Id);
-        navMan.NavigateTo($"food/list");
+        navMan.NavigateTo($"/Order/Delete/{Id}");
     }
 }
