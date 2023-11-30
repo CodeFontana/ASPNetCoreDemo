@@ -1,0 +1,90 @@
+﻿@page "/Order/Delete/{Id:int}"
+@attribute [StreamRendering]
+@inject IFoodData foodData
+@inject IOrderData orderData
+@inject NavigationManager navMan
+
+<PageTitle>Delete Order - BlazorSSR</PageTitle>
+
+<h1>Delete Order</h1>
+
+@if (recordNotFound)
+{
+    <h4>No record found.</h4>
+}
+else if (order is null)
+{
+    <h4>Record loading...</h4>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><strong>Order Name</strong></td>
+                <td>@order.OrderName</td>
+            </tr>
+            <tr>
+                <td><strong>Order Date</strong></td>
+                <td>@order.OrderDate</td>
+            </tr>
+            <tr>
+                <td><strong>Order Total</strong></td>
+                <td>@string.Format("{0:C}", order.Total)</td>
+            </tr>
+            <tr>
+                <td><strong>Item Ordered</strong></td>
+                <td>@itemPurchased</td>
+            </tr>
+            <tr>
+                <td><strong>Quantity</strong></td>
+                <td>@order.Quantity</td>
+            </tr>
+        </tbody>
+    </table>
+    <form class="d-inline" data-enhance method="post" @formname="deleteOrder" @onsubmit="() => HandleDeleteOrderAsync(false)">
+        <AntiforgeryToken />
+        <button class="btn btn-outline-danger" type="submit">Delete Order</button>
+    </form>
+    <form class="d-inline" data-enhance method="post" @formname="cancelDeleteOrder" @onsubmit="() => HandleDeleteOrderAsync(true)">
+        <AntiforgeryToken />
+        <button class="btn btn-secondary" type="submit">Cancel</button>
+    </form>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private OrderModel? order;
+    private string? itemPurchased;
+    private bool recordNotFound = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await orderData.GetOrderById(Id);
+
+        if (order != null)
+        {
+            var food = await foodData.GetFood();
+            itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;
+        }
+        else
+        {
+            recordNotFound = true;
+        }
+    }
+
+    private async Task HandleDeleteOrderAsync(bool cancel)
+    {
+        if (cancel)
+        {
+            navMan.NavigateTo($"/Order/Display/{Id}");
+        }
+        else
+        {
+            await orderData.DeleteOrder(Id);
+            navMan.NavigateTo($"food");
+        }
+    }
+}
