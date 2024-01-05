@@ -6,10 +6,16 @@
 
 <p>Current count: @CurrentCount</p>
 
-<form data-enhance method="post" @formname="counterForm" @onsubmit="IncrementCount">
+<form class="d-inline" data-enhance method="post" @formname="counterForm" @onsubmit="IncrementCount">
     <AntiforgeryToken />
     <input type="number" @bind-value="@CurrentCount" name="CurrentCount" hidden />
     <button class="btn btn-primary" type="submit">Click me</button>
+</form>
+
+<form class="d-inline" data-enhance method="post" @formname="resetForm" @onsubmit="ResetCount">
+    <AntiforgeryToken />
+    <input type="number" @bind-value="@CurrentCount" name="CurrentCount" hidden />
+    <button class="btn btn-secondary" type="submit">Reset</button>
 </form>
 
 @code {
@@ -19,5 +25,10 @@
     private void IncrementCount()
     {
         CurrentCount += 1;
+    }
+
+    private void ResetCount()
+    {
+        CurrentCount = 0;
     }
 }
