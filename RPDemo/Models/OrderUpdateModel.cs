@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace RPDemo.Models;
 
-namespace RPDemo.Models
+public class OrderUpdateModel
 {
-    public class OrderUpdateModel
-    {
-        public int Id { get; set; }
-        public string OrderName { get; set; }
-    }
+    public int Id { get; set; }
+    public string OrderName { get; set; }
 }

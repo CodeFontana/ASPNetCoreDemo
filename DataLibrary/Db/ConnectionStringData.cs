@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace DataLibrary.Db;
 
-namespace DataLibrary.Db
+public class ConnectionStringData
 {
-    public class ConnectionStringData
-    {
-        public string SqlConnectionName { get; set; } = "Default";
-    }
+    public string SqlConnectionName { get; set; } = "Default";
 }

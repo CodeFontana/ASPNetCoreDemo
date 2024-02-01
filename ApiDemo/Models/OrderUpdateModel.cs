@@ -1,8 +1,7 @@
-﻿namespace ApiDemoApp.Models
+﻿namespace ApiDemoApp.Models;
+
+public class OrderUpdateModel
 {
-    public class OrderUpdateModel
-    {
-        public int Id { get; set; }
-        public string OrderName { get; set; }
-    }
+    public int Id { get; set; }
+    public string OrderName { get; set; }
 }

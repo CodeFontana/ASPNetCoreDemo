@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace BlazorClientDemo.Models;
 
-namespace BlazorClientDemo.Models
+public class OrderCreateResultsModel
 {
-    public class OrderCreateResultsModel
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

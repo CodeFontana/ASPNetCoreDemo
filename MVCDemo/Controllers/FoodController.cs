@@ -1,25 +1,21 @@
-﻿using DataLibrary.Data;
+﻿using System.Threading.Tasks;
+using DataLibrary.Data;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MVCDemo.Controllers
+namespace MVCDemo.Controllers;
+
+public class FoodController : Controller
 {
-    public class FoodController : Controller
+    private readonly IFoodData _foodData;
+
+    public FoodController(IFoodData foodData)
     {
-        private readonly IFoodData _foodData;
+        _foodData = foodData;
+    }
 
-        public FoodController(IFoodData foodData)
-        {
-            _foodData = foodData;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var food = await _foodData.GetFood();
-            return View(food);
-        }
+    public async Task<IActionResult> Index()
+    {
+        var food = await _foodData.GetFood();
+        return View(food);
     }
 }

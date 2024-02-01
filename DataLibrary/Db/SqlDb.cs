@@ -1,49 +1,44 @@
 ﻿
-using Dapper;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
-namespace DataLibrary.Db
+namespace DataLibrary.Db;
+
+public class SqlDb : IDataAccess
 {
-    public class SqlDb : IDataAccess
+    private readonly IConfiguration _config;
+
+    public SqlDb(IConfiguration config)
     {
-        private readonly IConfiguration _config;
+        _config = config;
+    }
 
-        public SqlDb(IConfiguration config)
-        {
-            _config = config;
-        }
+    public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionStringName)
+    {
+        string connectionString = _config.GetConnectionString(connectionStringName);
 
-        public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionStringName)
-        {
-            string connectionString = _config.GetConnectionString(connectionStringName);
+        using IDbConnection connection = new SqlConnection(connectionString);
+        
+        var rows = await connection.QueryAsync<T>(storedProcedure,
+                                                  parameters,
+                                                  commandType: CommandType.StoredProcedure);
 
-            using (IDbConnection connection = new SqlConnection(connectionString))
-            {
-                var rows = await connection.QueryAsync<T>(storedProcedure,
-                                                          parameters,
-                                                          commandType: CommandType.StoredProcedure);
+        return rows.ToList();
+    }
 
-                return rows.ToList();
-            }
-        }
+    public async Task<int> SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
+    {
+        string connectionString = _config.GetConnectionString(connectionStringName);
 
-        public async Task<int> SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
-        {
-            string connectionString = _config.GetConnectionString(connectionStringName);
+        using IDbConnection connection = new SqlConnection(connectionString);
 
-            using (IDbConnection connection = new SqlConnection(connectionString))
-            {
-                return await connection.ExecuteAsync(storedProcedure,
-                                                     parameters,
-                                                     commandType: CommandType.StoredProcedure);
-            }
-        }
+        return await connection.ExecuteAsync(storedProcedure,
+                                             parameters,
+                                             commandType: CommandType.StoredProcedure);
     }
 }
