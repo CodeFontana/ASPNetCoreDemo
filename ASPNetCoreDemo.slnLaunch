@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "All",
+    "Projects": [
+      {
+        "Path": "ApiDemo\\ApiDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "BlazorClientDemo\\BlazorClientDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "BlazorServerDemo\\BlazorServerDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "BlazorSSRDemo\\BlazorSSRDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "RPDemo\\RPDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "MVCDemo\\MVCDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]
