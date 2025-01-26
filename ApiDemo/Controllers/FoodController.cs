@@ -4,7 +4,7 @@ using DataLibrary.Data;
 using DataLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiDemoApp.Controllers;
+namespace ApiDemo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

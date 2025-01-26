@@ -6,7 +6,7 @@ using DataLibrary.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiDemoApp.Controllers;
+namespace ApiDemo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -67,7 +67,7 @@ public class OrderController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put([FromBody]OrderUpdateModel data)
+    public async Task<IActionResult> Put([FromBody] OrderUpdateModel data)
     {
         await _orderData.UpdateOrderName(data.Id, data.OrderName);
         return Ok();

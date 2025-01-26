@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace ApiDemoApp.Controllers;
+namespace ApiDemo.Controllers;
 
-public class ValidateModelAttribute : ActionFilterAttribute
+public sealed class ValidateModelAttribute : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
