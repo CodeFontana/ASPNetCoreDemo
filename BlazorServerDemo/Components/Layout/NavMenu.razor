@@ -18,12 +18,12 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="food\list">
+            <NavLink class="nav-link" href="food/list">
                 <span class="oi oi-spreadsheet" aria-hidden="true"></span> Food List
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="order\create">
+            <NavLink class="nav-link" href="order/create">
                 <span class="oi oi-pencil" aria-hidden="true"></span> Create Order
             </NavLink>
         </li>
@@ -33,7 +33,7 @@
 @code {
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "";
 
     private void ToggleNavMenu()
     {

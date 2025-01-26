@@ -81,8 +81,8 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderModel order;
-    private string itemPurchased;
+    private OrderModel? order;
+    private string? itemPurchased;
     private bool confirmDelete = false;
     private bool recordNotFound = false;
     private OrderUpdateModel updateModel = new OrderUpdateModel();
@@ -94,7 +94,8 @@ else
         if (order != null)
         {
             var food = await foodData.GetFoodAsync();
-            itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;
+            itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title
+                ?? throw new InvalidOperationException("Food item not found.");
             updateModel.Id = order.Id;
             updateModel.OrderName = order.OrderName;
         }
@@ -107,7 +108,7 @@ else
     private async Task HandleValidSubmit()
     {
         await orderData.UpdateOrderName(updateModel.Id, updateModel.OrderName);
-        order.OrderName = updateModel.OrderName;
+        order!.OrderName = updateModel.OrderName;
     }
 
     private async Task HandleDeleteRecord()

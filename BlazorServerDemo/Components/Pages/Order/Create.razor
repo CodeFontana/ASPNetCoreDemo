@@ -48,9 +48,9 @@
 
     private void FoodItemChange(ChangeEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(e.Value.ToString()) == false)
+        if (string.IsNullOrWhiteSpace(e.Value?.ToString()) == false)
         {
-            order.FoodId = int.Parse(e.Value.ToString());
+            order.FoodId = int.Parse(e.Value.ToString()!);
         }
         else
         {
