@@ -1,4 +1,4 @@
-﻿@page "/Order/Delete/{Id:int}"
+﻿@page "/order/delete/{id:int}"
 @attribute [StreamRendering]
 @inject IFoodData foodData
 @inject IOrderData orderData
@@ -79,7 +79,7 @@ else
     {
         if (cancel)
         {
-            navMan.NavigateTo($"/Order/Display/{Id}");
+            navMan.NavigateTo($"/order/display/{Id}");
         }
         else
         {
