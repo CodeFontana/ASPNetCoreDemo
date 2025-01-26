@@ -26,7 +26,7 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Create()
     {
-        var food = await _foodData.GetFood();
+        var food = await _foodData.GetFoodAsync();
         OrderCreateModel model = new OrderCreateModel();
         
         food.ForEach(x =>
@@ -45,7 +45,7 @@ public class OrdersController : Controller
             return View();
         }
 
-        var food = await _foodData.GetFood();
+        var food = await _foodData.GetFoodAsync();
 
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
 
@@ -61,7 +61,7 @@ public class OrdersController : Controller
 
         if (displayOrder.Order != null)
         {
-            var food = await _foodData.GetFood();
+            var food = await _foodData.GetFoodAsync();
             displayOrder.ItemPurchased = food.Where(x => x.Id == displayOrder.Order.FoodId).FirstOrDefault()?.Title;
         }
 

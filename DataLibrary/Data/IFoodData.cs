@@ -6,5 +6,5 @@ namespace DataLibrary.Data;
 
 public interface IFoodData
 {
-    Task<List<FoodModel>> GetFood();
+    Task<List<FoodModel>> GetFoodAsync();
 }

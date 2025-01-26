@@ -93,7 +93,7 @@ else
 
         if (order != null)
         {
-            var food = await foodData.GetFood();
+            var food = await foodData.GetFoodAsync();
             itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;
             updateModel.Id = order.Id;
             updateModel.OrderName = order.OrderName;

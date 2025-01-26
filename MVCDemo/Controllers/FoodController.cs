@@ -15,7 +15,7 @@ public class FoodController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var food = await _foodData.GetFood();
+        var food = await _foodData.GetFoodAsync();
         return View(food);
     }
 }

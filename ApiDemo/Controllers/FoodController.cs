@@ -20,6 +20,6 @@ public class FoodController : ControllerBase
     [HttpGet]
     public async Task<List<FoodModel>> Get()
     {
-        return await _foodData.GetFood();
+        return await _foodData.GetFoodAsync();
     }
 }

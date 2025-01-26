@@ -30,14 +30,14 @@ public class OrderData : IOrderData
         p.Add("Total", order.Total);
         p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-        await _dataAccess.SaveData("dbo.spOrders_Insert", p, _connectionString.SqlConnectionName);
+        await _dataAccess.ExecuteAsync("dbo.spOrders_Insert", p, _connectionString.SqlConnectionName);
 
         return p.Get<int>("Id");
     }
 
     public Task<int> UpdateOrderName(int orderId, string orderName)
     {
-        return _dataAccess.SaveData("dbo.spOrders_UpdateName",
+        return _dataAccess.ExecuteAsync("dbo.spOrders_UpdateName",
                                     new
                                     {
                                         Id = orderId,
@@ -48,7 +48,7 @@ public class OrderData : IOrderData
 
     public Task<int> DeleteOrder(int orderId)
     {
-        return _dataAccess.SaveData("dbo.spOrders_Delete",
+        return _dataAccess.ExecuteAsync("dbo.spOrders_Delete",
                                     new
                                     {
                                         Id = orderId
@@ -58,7 +58,7 @@ public class OrderData : IOrderData
 
     public async Task<OrderModel> GetOrderById(int orderId)
     {
-        List<OrderModel> recs = await _dataAccess.LoadData<OrderModel, dynamic>(
+        List<OrderModel> recs = await _dataAccess.LoadDataAsync<OrderModel, dynamic>(
             "dbo.spOrders_GetById",
             new
             {

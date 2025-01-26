@@ -27,7 +27,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(OrderModel order)
     {
-        var food = await _foodData.GetFood();
+        var food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
         int id = await _orderData.CreateOrder(order);
         return Ok(new { Id = id });
@@ -48,7 +48,7 @@ public class OrderController : ControllerBase
 
         if (order != null)
         {
-            var food = await _foodData.GetFood();
+            var food = await _foodData.GetFoodAsync();
 
             var output = new
             {
