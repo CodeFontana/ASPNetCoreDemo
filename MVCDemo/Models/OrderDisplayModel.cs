@@ -4,6 +4,6 @@ namespace MVCDemo.Models;
 
 public class OrderDisplayModel
 {
-    public OrderModel Order { get; set; }
-    public string ItemPurchased { get; set; }
+    public OrderModel Order { get; set; } = new();
+    public string? ItemPurchased { get; set; }
 }
