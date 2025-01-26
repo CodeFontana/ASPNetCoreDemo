@@ -16,10 +16,11 @@ public class FoodData : IFoodData
         _connectionString = connectionString;
     }
 
-    public Task<List<FoodModel>> GetFood()
+    public async Task<List<FoodModel>> GetFoodAsync()
     {
-        return _dataAccess.LoadData<FoodModel, dynamic>("dbo.spFood_All",
-                                                        new { },
-                                                        _connectionString.SqlConnectionName);
+        return await _dataAccess.LoadDataAsync<FoodModel, dynamic>(
+            "dbo.spFood_All",
+            new { },
+            _connectionString.SqlConnectionName);
     }
 }

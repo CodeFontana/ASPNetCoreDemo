@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,50 +7,49 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace RPDemo.Pages.Orders
+namespace RPDemo.Pages.Orders;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly IFoodData _foodData;
+    private readonly IOrderData _orderData;
+
+    public CreateModel(IFoodData foodData, IOrderData orderData)
     {
-        private readonly IFoodData _foodData;
-        private readonly IOrderData _orderData;
+        _foodData = foodData;
+        _orderData = orderData;
+    }
 
-        public List<SelectListItem> FoodItems { get; set; }
+    public List<SelectListItem> FoodItems { get; set; } = [];
 
-        [BindProperty]
-        public OrderModel Order { get; set; }
+    [BindProperty]
+    public OrderModel Order { get; set; } = new();
 
-        public CreateModel(IFoodData foodData, IOrderData orderData)
+    public async Task OnGet()
+    {
+        List<FoodModel> food = await _foodData.GetFoodAsync();
+
+        FoodItems = [];
+
+        food.ForEach(x =>
         {
-            _foodData = foodData;
-            _orderData = orderData;
+            FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
+        });
+    }
+
+    public async Task<IActionResult> OnPost()
+    {
+        if (!ModelState.IsValid)
+        {
+            return Page();
         }
 
-        public async Task OnGet()
-        {
-            List<FoodModel> food = await _foodData.GetFood();
+        List<FoodModel> food = await _foodData.GetFoodAsync();
 
-            FoodItems = new List<SelectListItem>();
+        Order.Total = Order.Quantity * food.Where(x => x.Id == Order.FoodId).First().Price;
 
-            food.ForEach(x =>
-            {
-                FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
-            });
-        }
+        int id = await _orderData.CreateOrder(Order);
 
-        public async Task<IActionResult> OnPost()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            List<FoodModel> food = await _foodData.GetFood();
-
-            Order.Total = Order.Quantity * food.Where(x => x.Id == Order.FoodId).First().Price;
-
-            int id = await _orderData.CreateOrder(Order);
-
-            return RedirectToPage("./Display", new { Id = id });
-        }
+        return RedirectToPage("./Display", new { Id = id });
     }
 }

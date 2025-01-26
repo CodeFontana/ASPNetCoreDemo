@@ -1,4 +1,4 @@
-﻿@page "/Order/Create"
+﻿@page "/order/create"
 @rendermode InteractiveServer
 @inject IFoodData foodData
 @inject IOrderData orderData
@@ -42,15 +42,15 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        foodItems = await foodData.GetFood();
+        foodItems = await foodData.GetFoodAsync();
         await base.OnParametersSetAsync();
     }
 
     private void FoodItemChange(ChangeEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(e.Value.ToString()) == false)
+        if (string.IsNullOrWhiteSpace(e.Value?.ToString()) == false)
         {
-            order.FoodId = int.Parse(e.Value.ToString());
+            order.FoodId = int.Parse(e.Value.ToString()!);
         }
         else
         {

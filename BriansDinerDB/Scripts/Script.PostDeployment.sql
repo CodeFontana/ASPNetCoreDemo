@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-if not exists (select * from dbo.Food)
+if not exists (select 1 from dbo.Food)
 begin
     insert into dbo.Food([Title], [Description], [Price])
     values ('Cheeseburger Meal', 'A cheeseburger, fries and a drink.', '5.95'),

@@ -1,4 +1,4 @@
-﻿@page "/Food/List"
+﻿@page "/food/list"
 @attribute [StreamRendering]
 @inject IFoodData foodData
 @inject IOrderData orderData
@@ -35,10 +35,10 @@ else
 }
 
 @code {
-    private List<FoodModel> foodList;
+    private List<FoodModel>? foodList;
 
     protected override async Task OnInitializedAsync()
     {
-        foodList = await foodData.GetFood();
+        foodList = await foodData.GetFoodAsync();
     }
 }

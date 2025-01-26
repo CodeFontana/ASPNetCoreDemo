@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DataLibrary.Data;
 using DataLibrary.Models;
@@ -26,9 +28,9 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Create()
     {
-        var food = await _foodData.GetFood();
-        OrderCreateModel model = new OrderCreateModel();
-        
+        List<FoodModel> food = await _foodData.GetFoodAsync();
+        OrderCreateModel model = new();
+
         food.ForEach(x =>
         {
             model.FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
@@ -45,10 +47,8 @@ public class OrdersController : Controller
             return View();
         }
 
-        var food = await _foodData.GetFood();
-
+        List<FoodModel> food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
-
         int id = await _orderData.CreateOrder(order);
 
         return RedirectToAction("Display", new { id });
@@ -56,13 +56,18 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Display(int id)
     {
-        var displayOrder = new OrderDisplayModel();
-        displayOrder.Order = await _orderData.GetOrderById(id);
+        OrderDisplayModel displayOrder = new()
+        {
+            Order = await _orderData.GetOrderById(id)
+        };
 
         if (displayOrder.Order != null)
         {
-            var food = await _foodData.GetFood();
-            displayOrder.ItemPurchased = food.Where(x => x.Id == displayOrder.Order.FoodId).FirstOrDefault()?.Title;
+            List<FoodModel> food = await _foodData.GetFoodAsync();
+            displayOrder.ItemPurchased = food
+                .Where(x => x.Id == displayOrder.Order.FoodId)
+                .FirstOrDefault()?
+                .Title ?? throw new InvalidOperationException("Invalid order - FoodId is not found");
         }
 
         return View(displayOrder);

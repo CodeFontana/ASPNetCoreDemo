@@ -6,5 +6,6 @@
     [FoodId] INT NOT NULL, 
     [Quantity] INT NOT NULL, 
     [Total] MONEY NOT NULL, 
-    CONSTRAINT [FK_Order_Food] FOREIGN KEY ([FoodId]) REFERENCES [Food]([Id])
+    CONSTRAINT [FK_Order_Food_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Food]([Id])
 )
+GO

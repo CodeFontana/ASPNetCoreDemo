@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,12 +17,12 @@ public class SqlDb : IDataAccess
         _config = config;
     }
 
-    public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionStringName)
+    public async Task<List<T>> LoadDataAsync<T, U>(string storedProcedure, U parameters, string connectionStringName)
     {
         string connectionString = _config.GetConnectionString(connectionStringName);
 
         using IDbConnection connection = new SqlConnection(connectionString);
-        
+
         var rows = await connection.QueryAsync<T>(storedProcedure,
                                                   parameters,
                                                   commandType: CommandType.StoredProcedure);
@@ -31,7 +30,7 @@ public class SqlDb : IDataAccess
         return rows.ToList();
     }
 
-    public async Task<int> SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
+    public async Task<int> ExecuteAsync<T>(string storedProcedure, T parameters, string connectionStringName)
     {
         string connectionString = _config.GetConnectionString(connectionStringName);
 

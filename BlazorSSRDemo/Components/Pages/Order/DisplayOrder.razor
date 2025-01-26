@@ -1,4 +1,4 @@
-﻿@page "/Order/Display/{Id:int}"
+﻿@page "/order/display/{Id:int}"
 @attribute [StreamRendering]
 @inject IFoodData foodData
 @inject IOrderData orderData
@@ -81,7 +81,7 @@ else
 
         if (order != null)
         {
-            var food = await foodData.GetFood();
+            var food = await foodData.GetFoodAsync();
             itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;
             updateModel ??= new();
             updateModel.Id = order.Id;
@@ -100,6 +100,6 @@ else
 
     private void HandleDeleteOrder()
     {
-        navMan.NavigateTo($"/Order/Delete/{Id}");
+        navMan.NavigateTo($"/order/delete/{Id}");
     }
 }

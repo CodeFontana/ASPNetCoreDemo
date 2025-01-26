@@ -1,4 +1,4 @@
-﻿@page "/Order/Create"
+﻿@page "/order/create"
 @attribute [StreamRendering]
 @inject IFoodData foodData
 @inject IOrderData orderData
@@ -48,7 +48,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        foodItems = await foodData.GetFood();
+        foodItems = await foodData.GetFoodAsync();
     }
 
     private async Task HandleValidSubmit()

@@ -4,7 +4,7 @@ using DataLibrary.Data;
 using DataLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiDemoApp.Controllers;
+namespace ApiDemo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -20,6 +20,6 @@ public class FoodController : ControllerBase
     [HttpGet]
     public async Task<List<FoodModel>> Get()
     {
-        return await _foodData.GetFood();
+        return await _foodData.GetFoodAsync();
     }
 }
