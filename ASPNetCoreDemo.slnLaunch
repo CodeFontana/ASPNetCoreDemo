@@ -33,5 +33,20 @@
         "DebugTarget": "https"
       }
     ]
+  },
+  {
+    "Name": "BlazorClient + API",
+    "Projects": [
+      {
+        "Path": "ApiDemo\\ApiDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "BlazorClientDemo\\BlazorClientDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
   }
 ]
