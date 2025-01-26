@@ -38,20 +38,27 @@ else
 }
 
 @code {
-    private List<FoodModel> foodList;
-    private string errorString;
+    private List<FoodModel>? foodList;
+    private string? errorString;
 
     protected override async Task OnInitializedAsync()
     {
-        HttpResponseMessage response = await Http.GetAsync("api/food");
+        try
+        {
+            HttpResponseMessage response = await Http.GetAsync("api/food");
 
-        if (response.IsSuccessStatusCode)
-        {
-            foodList = await response.Content.ReadFromJsonAsync<List<FoodModel>>();
+            if (response.IsSuccessStatusCode)
+            {
+                foodList = await response.Content.ReadFromJsonAsync<List<FoodModel>>();
+            }
+            else
+            {
+                errorString = response.ReasonPhrase;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            errorString = response.ReasonPhrase;
+            errorString = ex.Message;
         }
     }
 }
