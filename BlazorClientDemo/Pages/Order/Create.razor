@@ -1,4 +1,4 @@
-﻿@page "/Order/Create"
+﻿@page "/order/create"
 @inject HttpClient Http
 @inject NavigationManager navMan
 
@@ -11,7 +11,7 @@
     <h4>System Error</h4>
     <p>@errorString</p>
 }
-else if (foodItems.Count == 0)
+else if (foodItems?.Count == 0)
 {
     <h4>Loading...</h4>
 }
@@ -30,7 +30,7 @@ else
                 </InputSelect>*@
             <select @onchange="FoodItemChange" class="form-control">
                 <option value="">Select a meal...</option>
-                @foreach (var f in foodItems)
+                @foreach (var f in foodItems!)
                 {
                     <option value="@f.Id">@f.Title</option>
                 }

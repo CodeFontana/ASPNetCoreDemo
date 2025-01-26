@@ -1,4 +1,4 @@
-﻿@page "/Order/Display/{Id:int}"
+﻿@page "/order/display/{Id:int}"
 @inject HttpClient Http
 @inject NavigationManager navMan
 
@@ -11,7 +11,7 @@
     <h4>System Error</h4>
     <p>@errorString</p>
 }
-else if (orderInfo.Order is null)
+else if (orderInfo is null || orderInfo.Order is null)
 {
     <h4>Loading...</h4>
 }
@@ -21,7 +21,7 @@ else
         <tbody>
             <tr>
                 <td><strong>Order Name</strong></td>
-                <td>@orderInfo.Order.OrderName</td>
+                <td>@orderInfo.Order!.OrderName</td>
             </tr>
             <tr>
                 <td><strong>Order Date</strong></td>
@@ -79,9 +79,9 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderResultModel orderInfo = new OrderResultModel();
-    private OrderUpdateModel updateModel = new OrderUpdateModel();
-    private string errorString;
+    private OrderResultModel? orderInfo;
+    private OrderUpdateModel updateModel = new();
+    private string? errorString;
     private bool confirmDelete = false;
 
     protected override async Task OnInitializedAsync()
@@ -91,8 +91,12 @@ else
         if (response.IsSuccessStatusCode)
         {
             orderInfo = await response.Content.ReadFromJsonAsync<OrderResultModel>();
-            updateModel.Id = orderInfo.Order.Id;
-            updateModel.OrderName = orderInfo.Order.OrderName;
+            
+            if (orderInfo is not null)
+            {
+                updateModel.Id = orderInfo.Order!.Id;
+                updateModel.OrderName = orderInfo.Order.OrderName!;
+            }
         }
         else
         {
@@ -105,7 +109,7 @@ else
         try
         {
             HttpResponseMessage response = await Http.PutAsJsonAsync("api/order", updateModel);
-            orderInfo.Order.OrderName = updateModel.OrderName;
+            orderInfo!.Order!.OrderName = updateModel.OrderName;
         }
         catch (Exception e)
         {
