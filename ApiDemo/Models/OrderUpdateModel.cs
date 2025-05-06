@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ApiDemoApp.Models;
+namespace ApiDemo.Models;
 
-public class OrderUpdateModel
+public sealed class OrderUpdateModel
 {
     [Required(ErrorMessage = "Order ID is required")]
     public int Id { get; set; }

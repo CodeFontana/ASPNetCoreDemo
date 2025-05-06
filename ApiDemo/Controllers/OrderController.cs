@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ApiDemoApp.Models;
+using ApiDemo.Models;
 using DataLibrary.Data;
 using DataLibrary.Models;
 using Microsoft.AspNetCore.Http;

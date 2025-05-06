@@ -1,6 +1,6 @@
 ﻿namespace BlazorClientDemo.Models;
 
-public class FoodModel
+public sealed class FoodModel
 {
     public int Id { get; set; }
     public string? Title { get; set; }

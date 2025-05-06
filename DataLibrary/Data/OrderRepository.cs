@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataLibrary.Data;
 
-public class OrderRepository : IOrderRepository
+public sealed class OrderRepository : IOrderRepository
 {
     private readonly IDataAccess _db;
     private readonly string _connectionString;

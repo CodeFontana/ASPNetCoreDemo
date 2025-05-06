@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlazorClientDemo.Models;
 
-public class OrderModel
+public sealed class OrderModel
 {
     public int Id { get; set; }
 
