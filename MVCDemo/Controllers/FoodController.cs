@@ -8,16 +8,16 @@ namespace MVCDemo.Controllers;
 
 public class FoodController : Controller
 {
-    private readonly IFoodData _foodData;
+    private readonly IFoodRepository _foodData;
 
-    public FoodController(IFoodData foodData)
+    public FoodController(IFoodRepository foodData)
     {
         _foodData = foodData;
     }
 
     public async Task<IActionResult> Index()
     {
-        List<FoodModel> food = await _foodData.GetFoodAsync();
+        IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
         return View(food);
     }
 }

@@ -1,21 +1,16 @@
 using System.Collections.Generic;
 using DataLibrary.Data;
-using DataLibrary.Db;
+using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
-builder.Services.AddSingleton(new ConnectionStringData
-{
-    SqlConnectionName = "Default"
-});
-builder.Services.AddSingleton<IDataAccess, SqlDb>();
-builder.Services.AddSingleton<IFoodData, FoodData>();
-builder.Services.AddSingleton<IOrderData, OrderData>();
+builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
+builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
+builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiDemoApp", Version = "v1" });

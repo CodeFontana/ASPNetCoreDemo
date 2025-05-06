@@ -12,10 +12,10 @@ namespace MVCDemo.Controllers;
 
 public class OrdersController : Controller
 {
-    private readonly IFoodData _foodData;
-    private readonly IOrderData _orderData;
+    private readonly IFoodRepository _foodData;
+    private readonly IOrderRepository _orderData;
 
-    public OrdersController(IFoodData foodData, IOrderData orderData)
+    public OrdersController(IFoodRepository foodData, IOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
@@ -28,10 +28,10 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Create()
     {
-        List<FoodModel> food = await _foodData.GetFoodAsync();
+        IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
         OrderCreateModel model = new();
 
-        food.ForEach(x =>
+        food.ToList().ForEach(x =>
         {
             model.FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
         });
@@ -47,9 +47,9 @@ public class OrdersController : Controller
             return View();
         }
 
-        List<FoodModel> food = await _foodData.GetFoodAsync();
+        IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
-        int id = await _orderData.CreateOrder(order);
+        int id = await _orderData.CreateOrderAsync(order);
 
         return RedirectToAction("Display", new { id });
     }
@@ -58,12 +58,12 @@ public class OrdersController : Controller
     {
         OrderDisplayModel displayOrder = new()
         {
-            Order = await _orderData.GetOrderById(id)
+            Order = await _orderData.GetOrderByIdAsync(id)
         };
 
         if (displayOrder.Order != null)
         {
-            List<FoodModel> food = await _foodData.GetFoodAsync();
+            IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
             displayOrder.ItemPurchased = food
                 .Where(x => x.Id == displayOrder.Order.FoodId)
                 .FirstOrDefault()?
@@ -76,20 +76,20 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(int id, string orderName)
     {
-        await _orderData.UpdateOrderName(id, orderName);
+        await _orderData.UpdateOrderNameAsync(id, orderName);
         return RedirectToAction("Display", new { id });
     }
 
     public async Task<IActionResult> Delete(int id)
     {
-        var order = await _orderData.GetOrderById(id);
+        var order = await _orderData.GetOrderByIdAsync(id);
         return View(order);
     }
 
     [HttpPost]
     public async Task<IActionResult> Delete(OrderModel order)
     {
-        await _orderData.DeleteOrder(order.Id);
+        await _orderData.DeleteOrderAsync(order.Id);
         return RedirectToAction("Create");
     }
 }

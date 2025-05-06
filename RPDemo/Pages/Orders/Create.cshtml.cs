@@ -11,10 +11,10 @@ namespace RPDemo.Pages.Orders;
 
 public class CreateModel : PageModel
 {
-    private readonly IFoodData _foodData;
-    private readonly IOrderData _orderData;
+    private readonly IFoodRepository _foodData;
+    private readonly IOrderRepository _orderData;
 
-    public CreateModel(IFoodData foodData, IOrderData orderData)
+    public CreateModel(IFoodRepository foodData, IOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
@@ -27,11 +27,11 @@ public class CreateModel : PageModel
 
     public async Task OnGet()
     {
-        List<FoodModel> food = await _foodData.GetFoodAsync();
+        IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
 
         FoodItems = [];
 
-        food.ForEach(x =>
+        food.ToList().ForEach(x =>
         {
             FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
         });
@@ -44,12 +44,9 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        List<FoodModel> food = await _foodData.GetFoodAsync();
-
+        IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
         Order.Total = Order.Quantity * food.Where(x => x.Id == Order.FoodId).First().Price;
-
-        int id = await _orderData.CreateOrder(Order);
-
+        int id = await _orderData.CreateOrderAsync(Order);
         return RedirectToPage("./Display", new { Id = id });
     }
 }

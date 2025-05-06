@@ -1,7 +1,7 @@
 ﻿@page "/order/display/{Id:int}"
 @rendermode InteractiveServer
-@inject IFoodData foodData
-@inject IOrderData orderData
+@inject IFoodRepository foodData
+@inject IOrderRepository orderData
 @inject NavigationManager navMan
 @using BlazorServerDemo.Models
 
@@ -9,11 +9,11 @@
 
 <h3>Display</h3>
 
-@if (recordNotFound)
+@if (_recordNotFound)
 {
     <h4>No record found.</h4>
 }
-else if (order is null)
+else if (_order is null)
 {
     <h4>Record loading...</h4>
 }
@@ -23,38 +23,38 @@ else
         <tbody>
             <tr>
                 <td><strong>Order Name</strong></td>
-                <td>@order.OrderName</td>
+                <td>@_order.OrderName</td>
             </tr>
             <tr>
                 <td><strong>Order Date</strong></td>
-                <td>@order.OrderDate</td>
+                <td>@_order.OrderDate</td>
             </tr>
             <tr>
                 <td><strong>Order Total</strong></td>
-                <td>@string.Format("{0:C}", order.Total)</td>
+                <td>@string.Format("{0:C}", _order.Total)</td>
             </tr>
             <tr>
                 <td><strong>Item Ordered</strong></td>
-                <td>@itemPurchased</td>
+                <td>@_itemPurchased</td>
             </tr>
             <tr>
                 <td><strong>Quantity</strong></td>
-                <td>@order.Quantity</td>
+                <td>@_order.Quantity</td>
             </tr>
             <tr>
                 <td colspan="2">
-                    @if (confirmDelete)
+                    @if (_confirmDelete)
                     {
                         <button class="btn btn-outline-danger" @onclick="HandleDeleteRecord">
                             Confirm Delete
                         </button>
-                        <button class="btn btn-secondary" @onclick="(() => confirmDelete = false)">
+                        <button class="btn btn-secondary" @onclick="(() => _confirmDelete = false)">
                             Cancel
                         </button>
                     }
                     else
                     {
-                        <button class="btn btn-danger" @onclick="(()=> confirmDelete = true)">
+                        <button class="btn btn-danger" @onclick="(()=> _confirmDelete = true)">
                             Delete Order
                         </button>
                     }
@@ -62,14 +62,14 @@ else
             </tr>
         </tbody>
     </table>
-    <EditForm Model="@updateModel" OnValidSubmit="HandleValidSubmit">
+    <EditForm Model="@_updateModel" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary Model="@updateModel" />
+        <ValidationSummary Model="@_updateModel" />
 
         <div class="form-group">
             <label class="control-label">Name for the Order</label>
-            <InputText @bind-Value="updateModel.OrderName" class="form-control" />
-            <ValidationMessage For="@(() => updateModel.OrderName)" class="text-danger" />
+            <InputText @bind-Value="_updateModel.OrderName" class="form-control" />
+            <ValidationMessage For="@(() => _updateModel.OrderName)" class="text-danger" />
         </div>
         <div class="form-group">
             <input type="submit" value="Update Order Name" class="btn btn-primary" />
@@ -81,39 +81,48 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderModel? order;
-    private string? itemPurchased;
-    private bool confirmDelete = false;
-    private bool recordNotFound = false;
-    private OrderUpdateModel updateModel = new OrderUpdateModel();
+    private OrderModel? _order;
+    private string? _itemPurchased;
+    private bool _confirmDelete = false;
+    private bool _recordNotFound = false;
+    private OrderUpdateModel _updateModel = new();
 
     protected override async Task OnInitializedAsync()
     {
-        order = await orderData.GetOrderById(Id);
+        _order = await orderData.GetOrderByIdAsync(Id);
 
-        if (order != null)
+        if (_order != null)
         {
             var food = await foodData.GetFoodAsync();
-            itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title
+            _itemPurchased = food.Where(x => x.Id == _order.FoodId).FirstOrDefault()?.Title
                 ?? throw new InvalidOperationException("Food item not found.");
-            updateModel.Id = order.Id;
-            updateModel.OrderName = order.OrderName;
+            _updateModel.Id = _order.Id;
+            _updateModel.OrderName = _order.OrderName;
         }
         else
         {
-            recordNotFound = true;
+            _recordNotFound = true;
         }
     }
 
     private async Task HandleValidSubmit()
     {
-        await orderData.UpdateOrderName(updateModel.Id, updateModel.OrderName);
-        order!.OrderName = updateModel.OrderName;
+        if (_updateModel.Id <= 0)
+        {
+            throw new InvalidOperationException("Invalid order ID");
+        }
+        else if (string.IsNullOrWhiteSpace(_updateModel.OrderName))
+        {
+            throw new InvalidOperationException("Order name cannot be empty.");
+        }
+
+        await orderData.UpdateOrderNameAsync(_updateModel.Id, _updateModel.OrderName);
+        _order!.OrderName = _updateModel.OrderName;
     }
 
     private async Task HandleDeleteRecord()
     {
-        await orderData.DeleteOrder(Id);
+        await orderData.DeleteOrderAsync(Id);
         //confirmDelete = false;
         navMan.NavigateTo($"food/list");
     }

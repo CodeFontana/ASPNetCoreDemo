@@ -1,13 +1,13 @@
 ﻿@page "/food/list"
 @attribute [StreamRendering]
-@inject IFoodData foodData
-@inject IOrderData orderData
+@inject IFoodRepository foodData
+@inject IOrderRepository orderData
 
 <PageTitle>Food List - Blazor Server</PageTitle>
 
 <h3>List</h3>
 
-@if (foodList is null)
+@if (_foodList is null)
 {
     <h4>Record loading...</h4>
 }
@@ -22,7 +22,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var food in foodList)
+            @foreach (var food in _foodList)
             {
                 <tr>
                     <td>@food.Title</td>
@@ -35,10 +35,10 @@ else
 }
 
 @code {
-    private List<FoodModel>? foodList;
+    private IEnumerable<FoodModel>? _foodList;
 
     protected override async Task OnInitializedAsync()
     {
-        foodList = await foodData.GetFoodAsync();
+        _foodList = await foodData.GetFoodAsync();
     }
 }

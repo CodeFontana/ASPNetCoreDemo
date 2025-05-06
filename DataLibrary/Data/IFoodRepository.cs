@@ -4,7 +4,7 @@ using DataLibrary.Models;
 
 namespace DataLibrary.Data;
 
-public interface IFoodData
+public interface IFoodRepository
 {
-    Task<List<FoodModel>> GetFoodAsync();
+    Task<IEnumerable<FoodModel>> GetFoodAsync();
 }

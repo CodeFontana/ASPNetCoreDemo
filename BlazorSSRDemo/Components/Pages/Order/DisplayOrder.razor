@@ -1,7 +1,7 @@
 ﻿@page "/order/display/{Id:int}"
 @attribute [StreamRendering]
-@inject IFoodData foodData
-@inject IOrderData orderData
+@inject IFoodRepository foodData
+@inject IOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Display Order - BlazorSSR</PageTitle>
@@ -77,7 +77,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        order = await orderData.GetOrderById(Id);
+        order = await orderData.GetOrderByIdAsync(Id);
 
         if (order != null)
         {
@@ -95,7 +95,12 @@ else
 
     private async Task HandleUpdateOrderNameAsync()
     {
-        await orderData.UpdateOrderName(updateModel.Id, updateModel.OrderName);
+        if (string.IsNullOrWhiteSpace(updateModel.OrderName))
+        {
+            throw new InvalidOperationException("Order name cannot be empty");
+        }
+        
+        await orderData.UpdateOrderNameAsync(updateModel.Id, updateModel.OrderName);
     }
 
     private void HandleDeleteOrder()

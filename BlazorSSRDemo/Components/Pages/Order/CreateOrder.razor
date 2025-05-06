@@ -1,7 +1,7 @@
 ﻿@page "/order/create"
 @attribute [StreamRendering]
-@inject IFoodData foodData
-@inject IOrderData orderData
+@inject IFoodRepository foodData
+@inject IOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Create Order - BlazorSSR</PageTitle>
@@ -44,7 +44,7 @@
     [SupplyParameterFromForm]
     public OrderModel Order { get; set; } = new();
 
-    private List<FoodModel> foodItems = new List<FoodModel>();
+    private IEnumerable<FoodModel> foodItems = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,7 +55,7 @@
     {
         Order.OrderDate = DateTime.UtcNow;
         Order.Total = Order.Quantity * foodItems.Where(x => x.Id == Order.FoodId).First().Price;
-        int id = await orderData.CreateOrder(Order);
+        int id = await orderData.CreateOrderAsync(Order);
         navMan.NavigateTo($"order/display/{id}");
     }
 }

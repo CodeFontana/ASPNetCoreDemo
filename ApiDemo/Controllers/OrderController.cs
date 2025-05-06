@@ -12,10 +12,10 @@ namespace ApiDemo.Controllers;
 [ApiController]
 public class OrderController : ControllerBase
 {
-    private readonly IFoodData _foodData;
-    private readonly IOrderData _orderData;
+    private readonly IFoodRepository _foodData;
+    private readonly IOrderRepository _orderData;
 
-    public OrderController(IFoodData foodData, IOrderData orderData)
+    public OrderController(IFoodRepository foodData, IOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
@@ -29,7 +29,7 @@ public class OrderController : ControllerBase
     {
         var food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
-        int id = await _orderData.CreateOrder(order);
+        int id = await _orderData.CreateOrderAsync(order);
         return Ok(new { Id = id });
     }
 
@@ -44,7 +44,7 @@ public class OrderController : ControllerBase
             return BadRequest();
         }
 
-        var order = await _orderData.GetOrderById(id);
+        var order = await _orderData.GetOrderByIdAsync(id);
 
         if (order != null)
         {
@@ -69,7 +69,16 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Put([FromBody] OrderUpdateModel data)
     {
-        await _orderData.UpdateOrderName(data.Id, data.OrderName);
+        if (data.Id <= 0)
+        {
+            return BadRequest("Invalid order ID.");
+        }
+        else if (string.IsNullOrWhiteSpace(data.OrderName))
+        {
+            return BadRequest("Order name cannot be empty.");
+        }
+
+        await _orderData.UpdateOrderNameAsync(data.Id, data.OrderName);
         return Ok();
     }
 
@@ -78,7 +87,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(int id)
     {
-        await _orderData.DeleteOrder(id);
+        await _orderData.DeleteOrderAsync(id);
         return Ok();
     }
 }

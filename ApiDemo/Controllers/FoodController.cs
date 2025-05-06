@@ -10,15 +10,15 @@ namespace ApiDemo.Controllers;
 [ApiController]
 public class FoodController : ControllerBase
 {
-    private readonly IFoodData _foodData;
+    private readonly IFoodRepository _foodData;
 
-    public FoodController(IFoodData foodData)
+    public FoodController(IFoodRepository foodData)
     {
         _foodData = foodData;
     }
 
     [HttpGet]
-    public async Task<List<FoodModel>> Get()
+    public async Task<IEnumerable<FoodModel>> Get()
     {
         return await _foodData.GetFoodAsync();
     }

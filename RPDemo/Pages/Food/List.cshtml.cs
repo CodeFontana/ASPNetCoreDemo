@@ -8,14 +8,14 @@ namespace RPDemo.Pages.Food;
 
 public class ListModel : PageModel
 {
-    private readonly IFoodData _foodData;
+    private readonly IFoodRepository _foodData;
 
-    public ListModel(IFoodData foodData)
+    public ListModel(IFoodRepository foodData)
     {
         _foodData = foodData;
     }
 
-    public List<FoodModel> Food { get; set; } = [];
+    public IEnumerable<FoodModel> Food { get; set; } = [];
 
     public async Task OnGet()
     {

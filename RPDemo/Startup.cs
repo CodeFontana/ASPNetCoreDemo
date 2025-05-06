@@ -1,5 +1,5 @@
 using DataLibrary.Data;
-using DataLibrary.Db;
+using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,13 +21,9 @@ namespace RPDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSingleton(new ConnectionStringData
-            {
-                SqlConnectionName = "Default"
-            });
-            services.AddSingleton<IDataAccess, SqlDb>();
-            services.AddSingleton<IFoodData, FoodData>();
-            services.AddSingleton<IOrderData, OrderData>();
+            services.AddSingleton<IDataAccess, SqlDataAccess>();
+            services.AddSingleton<IFoodRepository, FoodRepository>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

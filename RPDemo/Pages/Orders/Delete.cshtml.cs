@@ -8,9 +8,9 @@ namespace RPDemo.Pages.Orders;
 
 public class DeleteModel : PageModel
 {
-    private readonly IOrderData _orderData;
+    private readonly IOrderRepository _orderData;
 
-    public DeleteModel(IOrderData orderData)
+    public DeleteModel(IOrderRepository orderData)
     {
         _orderData = orderData;
     }
@@ -18,16 +18,16 @@ public class DeleteModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int Id { get; set; }
 
-    public OrderModel Order { get; set; } = new();
+    public OrderModel? Order { get; set; }
 
     public async Task OnGet()
     {
-        Order = await _orderData.GetOrderById(Id);
+        Order = await _orderData.GetOrderByIdAsync(Id);
     }
 
     public async Task<IActionResult> OnPost()
     {
-        await _orderData.DeleteOrder(Id);
+        await _orderData.DeleteOrderAsync(Id);
         return RedirectToPage("./Create");
     }
 }

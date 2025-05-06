@@ -1,7 +1,7 @@
 ﻿@page "/order/delete/{Id:int}"
 @attribute [StreamRendering]
-@inject IFoodData foodData
-@inject IOrderData orderData
+@inject IFoodRepository foodData
+@inject IOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Delete Order - BlazorSSR</PageTitle>
@@ -62,7 +62,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        order = await orderData.GetOrderById(Id);
+        order = await orderData.GetOrderByIdAsync(Id);
 
         if (order != null)
         {
@@ -83,7 +83,7 @@ else
         }
         else
         {
-            await orderData.DeleteOrder(Id);
+            await orderData.DeleteOrderAsync(Id);
             navMan.NavigateTo($"food");
         }
     }
