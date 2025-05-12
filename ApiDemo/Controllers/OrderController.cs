@@ -25,7 +25,7 @@ public class OrderController : ControllerBase
     [ValidateModel]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(OrderModel order)
+    public async Task<IActionResult> CreateOrder(OrderModel order)
     {
         var food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
@@ -37,7 +37,7 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetOrderById(int id)
     {
         if (id == 0)
         {
@@ -67,7 +67,7 @@ public class OrderController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put([FromBody] OrderUpdateModel data)
+    public async Task<IActionResult> UpdateOrderName([FromBody] OrderUpdateModel data)
     {
         if (data.Id <= 0)
         {
@@ -85,7 +85,7 @@ public class OrderController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteOrder(int id)
     {
         await _orderData.DeleteOrderAsync(id);
         return Ok();

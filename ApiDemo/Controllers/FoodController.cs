@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DataLibrary.Data;
 using DataLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ApiDemo.Controllers;
 
@@ -18,7 +19,8 @@ public class FoodController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FoodModel>> Get()
+    [EnableRateLimiting("fixed")]
+    public async Task<IEnumerable<FoodModel>> GetFood()
     {
         return await _foodData.GetFoodAsync();
     }
