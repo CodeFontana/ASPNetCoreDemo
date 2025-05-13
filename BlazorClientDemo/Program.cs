@@ -1,4 +1,4 @@
-using BlazorClientDemo;
+using BlazorClientDemo.Features;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
