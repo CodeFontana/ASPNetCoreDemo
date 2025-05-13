@@ -1,4 +1,4 @@
-using BlazorSSRDemo.Components;
+using BlazorSSRDemo.Features;
 using DataLibrary.Data;
 using DataLibrary.DataAccess;
 
