@@ -11,7 +11,7 @@
 <EditForm Model="@order" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary Model="@order" />
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label class="control-label">Item to Order</label>
         <select @onchange="FoodItemChange" class="form-control">
             <option value="">Select a meal...</option>
@@ -21,12 +21,12 @@
             }
         </select>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label class="control-label">Quantity</label>
         <InputNumber @bind-Value="order.Quantity" class="form-control" />
         <ValidationMessage For="@(() => order.Quantity)" class="text-danger" />
     </div>
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label class="control-label">Name for the Order</label>
         <InputText @bind-Value="order.OrderName" class="form-control" />
         <ValidationMessage For="@(() => order.OrderName)" class="text-danger" />
