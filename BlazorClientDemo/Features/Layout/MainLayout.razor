@@ -1,13 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<PageTitle>Blazor Client</PageTitle>
 
-    <div class="main">
-        <div class="content px-4">
-            @Body
-        </div>
-    </div>
+<div style="min-width: 350px;">
+    <Navbar />
+    <main class="container" style="padding-top: 3rem;">
+        @Body
+    </main>
 </div>
