@@ -11,10 +11,10 @@ namespace RPDemo.Pages.Orders;
 
 public class DisplayModel : PageModel
 {
-    private readonly IOrderData _orderData;
-    private readonly IFoodData _foodData;
+    private readonly IOrderRepository _orderData;
+    private readonly IFoodRepository _foodData;
 
-    public DisplayModel(IOrderData orderData, IFoodData foodData)
+    public DisplayModel(IOrderRepository orderData, IFoodRepository foodData)
     {
         _orderData = orderData;
         _foodData = foodData;
@@ -26,16 +26,16 @@ public class DisplayModel : PageModel
     [BindProperty]
     public OrderUpdateModel UpdateModel { get; set; } = new();
 
-    public OrderModel Order { get; set; } = new();
+    public OrderModel? Order { get; set; }
     public string? ItemPurchased { get; set; }
 
     public async Task<IActionResult> OnGet()
     {
-        Order = await _orderData.GetOrderById(Id);
+        Order = await _orderData.GetOrderByIdAsync(Id);
 
         if (Order != null)
         {
-            List<FoodModel> food = await _foodData.GetFoodAsync();
+            IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
             ItemPurchased = food.Where(x => x.Id == Order.FoodId).FirstOrDefault()?.Title;
         }
 
@@ -44,12 +44,14 @@ public class DisplayModel : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        if (ModelState.IsValid == false)
+        if (ModelState.IsValid == false 
+            || UpdateModel.Id <= 0 
+            || string.IsNullOrWhiteSpace(UpdateModel.OrderName))
         {
             return Page();
         }
 
-        await _orderData.UpdateOrderName(UpdateModel.Id, UpdateModel.OrderName);
+        await _orderData.UpdateOrderNameAsync(UpdateModel.Id, UpdateModel.OrderName);
 
         return RedirectToPage("./Display", new { UpdateModel.Id });
     }

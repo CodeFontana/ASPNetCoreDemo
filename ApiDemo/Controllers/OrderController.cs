@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ApiDemoApp.Models;
+using ApiDemo.Models;
 using DataLibrary.Data;
 using DataLibrary.Models;
 using Microsoft.AspNetCore.Http;
@@ -12,10 +12,10 @@ namespace ApiDemo.Controllers;
 [ApiController]
 public class OrderController : ControllerBase
 {
-    private readonly IFoodData _foodData;
-    private readonly IOrderData _orderData;
+    private readonly IFoodRepository _foodData;
+    private readonly IOrderRepository _orderData;
 
-    public OrderController(IFoodData foodData, IOrderData orderData)
+    public OrderController(IFoodRepository foodData, IOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
@@ -25,11 +25,11 @@ public class OrderController : ControllerBase
     [ValidateModel]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(OrderModel order)
+    public async Task<IActionResult> CreateOrder(OrderModel order)
     {
         var food = await _foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
-        int id = await _orderData.CreateOrder(order);
+        int id = await _orderData.CreateOrderAsync(order);
         return Ok(new { Id = id });
     }
 
@@ -37,14 +37,14 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetOrderById(int id)
     {
         if (id == 0)
         {
             return BadRequest();
         }
 
-        var order = await _orderData.GetOrderById(id);
+        var order = await _orderData.GetOrderByIdAsync(id);
 
         if (order != null)
         {
@@ -67,18 +67,27 @@ public class OrderController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put([FromBody] OrderUpdateModel data)
+    public async Task<IActionResult> UpdateOrderName([FromBody] OrderUpdateModel data)
     {
-        await _orderData.UpdateOrderName(data.Id, data.OrderName);
+        if (data.Id <= 0)
+        {
+            return BadRequest("Invalid order ID.");
+        }
+        else if (string.IsNullOrWhiteSpace(data.OrderName))
+        {
+            return BadRequest("Order name cannot be empty.");
+        }
+
+        await _orderData.UpdateOrderNameAsync(data.Id, data.OrderName);
         return Ok();
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteOrder(int id)
     {
-        await _orderData.DeleteOrder(id);
+        await _orderData.DeleteOrderAsync(id);
         return Ok();
     }
 }

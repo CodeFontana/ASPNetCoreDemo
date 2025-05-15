@@ -1,0 +1,62 @@
+﻿@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<nav class="navbar navbar-dark navbar-expand-md d-flex fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="img/Blazor.png" width="30" height="30" class="mx-2" />
+            Blazor Client
+        </a>
+
+        <div class="d-flex align-items-center">
+            <i class="theme-switch d-md-none mx-2 text-light fs-4 bi bi-sun-fill"></i>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" Match="NavLinkMatch.All" href="">Home</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" Match="NavLinkMatch.All" href="Food">Food</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" Match="NavLinkMatch.All" href="Order/Create">Create Order</NavLink>
+                </li>
+            </ul>
+        </div>
+
+        <i class="theme-switch d-none d-md-inline mx-2 text-light fs-4 bi bi-sun-fill"></i>
+    </div>
+</nav>
+
+@code {
+    private IJSObjectReference? _jsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_jsModule is null)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Features/Layout/Navbar.razor.js");
+        }
+
+        if (firstRender)
+        {
+            await _jsModule.InvokeVoidAsync("onLoad");
+        }
+
+        await _jsModule.InvokeVoidAsync("onUpdate");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule is not null)
+        {
+            await _jsModule.InvokeVoidAsync("onDispose");
+            await _jsModule.DisposeAsync();
+        }
+    }
+}

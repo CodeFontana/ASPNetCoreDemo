@@ -10,10 +10,17 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-if not exists (select 1 from dbo.Food)
-begin
-    insert into dbo.Food([Title], [Description], [Price])
-    values ('Cheeseburger Meal', 'A cheeseburger, fries and a drink.', '5.95'),
-    ('Taco Meal', 'Steak Taco, salad and a drink.', '8.95'),
-    ('Salad Meal', 'A cesear salad and a water.', '4.95');
-end
+merge into dbo.Food as Target
+using (values 
+    ('Cheeseburger Meal', 'A cheeseburger, fries and a drink.', '15.95'),
+    ('Taco Meal', 'Steak Taco, salad and a drink.', '18.95'),
+    ('Salad Meal', 'A cesear salad and a water.', '14.95')
+) as Source ([Title], [Description], [Price])
+on Target.[Title] = Source.[Title]
+when matched then
+    update set 
+        Target.[Description] = Source.[Description],
+        Target.[Price] = Source.[Price]
+when not matched then
+    insert ([Title], [Description], [Price])
+    values (Source.[Title], Source.[Description], Source.[Price]);

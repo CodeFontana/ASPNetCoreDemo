@@ -1,6 +1,6 @@
 ﻿namespace RPDemo.Models;
 
-public class OrderUpdateModel
+public sealed class OrderUpdateModel
 {
     public int Id { get; set; }
     public string? OrderName { get; set; }

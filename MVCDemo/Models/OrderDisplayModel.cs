@@ -2,8 +2,8 @@
 
 namespace MVCDemo.Models;
 
-public class OrderDisplayModel
+public sealed class OrderDisplayModel
 {
-    public OrderModel Order { get; set; } = new();
+    public OrderModel? Order { get; set; }
     public string? ItemPurchased { get; set; }
 }
