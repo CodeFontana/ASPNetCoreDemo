@@ -22,6 +22,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPDemo", "RPDemo\RPDemo.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSSRDemo", "BlazorSSRDemo\BlazorSSRDemo.csproj", "{DF4FB899-2647-421D-A687-6F2327DD9A1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireDemo.AppHost", "AspireDemo\AspireDemo.AppHost\AspireDemo.AppHost.csproj", "{D34FFC09-CC17-40A5-A3DF-66AA873A9426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireDemo.ServiceDefaults", "AspireDemo\AspireDemo.ServiceDefaults\AspireDemo.ServiceDefaults.csproj", "{02FDBD0E-B450-98C5-0709-D30E8560E15E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF4FB899-2647-421D-A687-6F2327DD9A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D34FFC09-CC17-40A5-A3DF-66AA873A9426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D34FFC09-CC17-40A5-A3DF-66AA873A9426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D34FFC09-CC17-40A5-A3DF-66AA873A9426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D34FFC09-CC17-40A5-A3DF-66AA873A9426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02FDBD0E-B450-98C5-0709-D30E8560E15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FDBD0E-B450-98C5-0709-D30E8560E15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02FDBD0E-B450-98C5-0709-D30E8560E15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02FDBD0E-B450-98C5-0709-D30E8560E15E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
