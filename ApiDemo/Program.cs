@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net.Mime;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
+using ApiDemo.Endpoints;
 using DataLibrary.Data;
 using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
@@ -84,7 +84,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowOrigin");
 app.UseRateLimiter();
-app.MapControllers();
+app.AddFoodApiEndpoints();
+app.AddOrderApiEndpoints();
 app.Run();
 
 static string GetUserEndPoint(HttpContext context) =>
