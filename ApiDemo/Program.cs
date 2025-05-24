@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
@@ -79,6 +80,7 @@ if (app.Environment.IsDevelopment())
             ["activated"] = false
         };
     });
+    app.MapDefaultEndpoints();
 }
 
 app.UseHttpsRedirection();
