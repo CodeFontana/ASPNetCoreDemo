@@ -23,6 +23,7 @@ public static class OrderApi
             .Produces(StatusCodes.Status404NotFound)
             .RequireRateLimiting("fixed");
     }
+
     private static async Task<IResult> CreateOrderAsync(IFoodRepository foodData, IOrderRepository orderData, OrderModel order)
     {
         IEnumerable<FoodModel> food = await foodData.GetFoodAsync();
