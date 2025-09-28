@@ -93,7 +93,7 @@ public sealed class SqlDataAccess : IDataAccess
 
     public async Task<IEnumerable<T>> QueryMultipleAsync<T, U>(string storedProcedure, U parameters, string connectionString, ushort? commandTimeout = 180)
     {
-        await using SqlConnection connection = new SqlConnection(connectionString);
+        await using SqlConnection connection = new(connectionString);
         IEnumerable<T> result = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure, commandTimeout: commandTimeout);
         return result;
     }
