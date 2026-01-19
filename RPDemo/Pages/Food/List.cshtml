@@ -17,11 +17,11 @@
     <tbody>
         @foreach (var food in Model.Food)
         {
-        <tr>
-            <td>@food.Title</td>
-            <td>@food.Description</td>
-            <td>@string.Format("{0:C}", food.Price)</td>
-        </tr>
+            <tr>
+                <td>@food.Title</td>
+                <td>@food.Description</td>
+                <td>@string.Format("{0:C}", food.Price)</td>
+            </tr>
         }
     </tbody>
 </table>
