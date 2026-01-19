@@ -14,19 +14,16 @@ builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapDefaultEndpoints();
-}
-else
+if (app.Environment.IsDevelopment() == false)
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
-app.MapRazorPages();
+app.MapStaticAssets();
+app.MapRazorPages()
+    .WithStaticAssets();
 app.Run();

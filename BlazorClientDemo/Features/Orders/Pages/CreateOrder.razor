@@ -69,8 +69,6 @@ else
         {
             errorString = response.ReasonPhrase;
         }
-
-        await base.OnParametersSetAsync();
     }
 
     private void FoodItemChange(ChangeEventArgs e)
@@ -91,15 +89,17 @@ else
 
         try
         {
-            var response = await Http.PostAsJsonAsync("api/order", order);
-            var contents = await response.Content.ReadFromJsonAsync<OrderCreateResultsModel>();
+            HttpResponseMessage response = await Http.PostAsJsonAsync("api/order", order);
+            OrderCreateResultsModel? contents = await response.Content.ReadFromJsonAsync<OrderCreateResultsModel>();
 
-            order = new OrderModel();
-            //navMan.NavigateTo($"order/display/{contents.Id}");
+            if (contents is not null)
+            {
+                order = new OrderModel();
+                navMan.NavigateTo($"order/display/{contents.Id}");
+            }
         }
         catch (Exception e)
         {
-
             errorString = e.Message;
         }
     }

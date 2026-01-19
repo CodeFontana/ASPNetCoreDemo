@@ -2,29 +2,34 @@ using BlazorServerDemo.Features;
 using DataLibrary.Data;
 using DataLibrary.DataAccess;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents()
+    .AddHubOptions(options =>
+    {
+        options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+        options.HandshakeTimeout = TimeSpan.FromSeconds(30);
+    });
+builder.Services.AddResponseCompression();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() == false)
 {
-    app.MapDefaultEndpoints();
-}
-else
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseAntiforgery();
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
+    .AllowAnonymous();
 app.Run();

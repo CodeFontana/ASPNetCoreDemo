@@ -14,20 +14,16 @@ builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapDefaultEndpoints();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

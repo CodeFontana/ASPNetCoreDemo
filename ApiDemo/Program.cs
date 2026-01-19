@@ -14,20 +14,16 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiDemoApp", Version = "v1" });
-});
+builder.Services.AddOpenApi();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin", builder => 
+    options.AddPolicy("AllowOrigin", builder =>
         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 builder.Services.AddProblemDetails(options =>
@@ -70,10 +66,10 @@ WebApplication app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
+    app.MapOpenApi().AllowAnonymous();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiDemoApp v1");
+        options.SwaggerEndpoint("/openapi/v1.json", "ApiDemoApp v1");
         options.EnableTryItOutByDefault();
         options.ConfigObject.AdditionalItems["syntaxHighlight"] = new Dictionary<string, object>
         {

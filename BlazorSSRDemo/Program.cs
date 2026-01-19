@@ -21,8 +21,10 @@ else
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseAntiforgery();
-app.MapRazorComponents<App>();
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AllowAnonymous();
 app.Run();
