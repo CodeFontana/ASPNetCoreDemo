@@ -2,7 +2,7 @@
 
 namespace ApiDemo.Models;
 
-public sealed class OrderUpdateModel
+public sealed class FoodOrderUpdateModel
 {
     [Required(ErrorMessage = "Order ID is required")]
     public int Id { get; set; }

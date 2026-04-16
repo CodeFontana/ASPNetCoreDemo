@@ -8,10 +8,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace ApiDemo.Endpoints;
 
-public static class OrderApi
+public static class FoodOrderApi
 {
-    public static void AddOrderApiEndpoints(this WebApplication app)
+    public static void AddFoodOrderApiEndpoints(this WebApplication app)
     {
+        app.MapGet("/api/order", GetAllOrdersAsync)
+            .Produces(StatusCodes.Status200OK)
+            .RequireRateLimiting("fixed");
+
         app.MapPost("/api/order", CreateOrderAsync)
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
@@ -22,9 +26,20 @@ public static class OrderApi
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
             .RequireRateLimiting("fixed");
+
+        app.MapDelete("/api/order/{id}", DeleteOrderAsync)
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .RequireRateLimiting("fixed");
     }
 
-    private static async Task<IResult> CreateOrderAsync(IFoodRepository foodData, IOrderRepository orderData, OrderModel order)
+    private static async Task<IResult> GetAllOrdersAsync(IFoodOrderRepository orderData)
+    {
+        IEnumerable<FoodOrderSummaryModel> orders = await orderData.GetAllOrdersAsync();
+        return Results.Ok(orders);
+    }
+
+    private static async Task<IResult> CreateOrderAsync(IFoodRepository foodData, IFoodOrderRepository orderData, FoodOrderModel order)
     {
         IEnumerable<FoodModel> food = await foodData.GetFoodAsync();
         order.Total = order.Quantity * food.Where(x => x.Id == order.FoodId).First().Price;
@@ -32,16 +47,16 @@ public static class OrderApi
         return Results.Ok(new { Id = id });
     }
     
-    private static async Task<IResult> GetOrderByIdAsync(IFoodRepository foodData, IOrderRepository orderData, int id)
+    private static async Task<IResult> GetOrderByIdAsync(IFoodRepository foodData, IFoodOrderRepository orderData, int id)
     {
         if (id == 0)
         {
             return Results.BadRequest();
         }
         
-        OrderModel? order = await orderData.GetOrderByIdAsync(id);
+        FoodOrderModel? order = await orderData.GetOrderByIdAsync(id);
         
-        if (order != null)
+        if (order is not null)
         {
             IEnumerable<FoodModel> food = await foodData.GetFoodAsync();
             
@@ -57,5 +72,16 @@ public static class OrderApi
         }
 
         return Results.NotFound();
+    }
+
+    private static async Task<IResult> DeleteOrderAsync(IFoodOrderRepository orderData, int id)
+    {
+        if (id <= 0)
+        {
+            return Results.BadRequest();
+        }
+
+        await orderData.DeleteOrderAsync(id);
+        return Results.Ok();
     }
 }

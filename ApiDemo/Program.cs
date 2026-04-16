@@ -19,7 +19,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IFoodOrderRepository, FoodOrderRepository>();
 builder.Services.AddOpenApi();
 builder.Services.AddCors(options =>
 {
@@ -83,7 +83,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowOrigin");
 app.UseRateLimiter();
 app.AddFoodApiEndpoints();
-app.AddOrderApiEndpoints();
+app.AddFoodOrderApiEndpoints();
 app.Run();
 
 static string GetUserEndPoint(HttpContext context) =>

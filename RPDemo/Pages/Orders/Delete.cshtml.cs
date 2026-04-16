@@ -8,9 +8,9 @@ namespace RPDemo.Pages.Orders;
 
 public class DeleteModel : PageModel
 {
-    private readonly IOrderRepository _orderData;
+    private readonly IFoodOrderRepository _orderData;
 
-    public DeleteModel(IOrderRepository orderData)
+    public DeleteModel(IFoodOrderRepository orderData)
     {
         _orderData = orderData;
     }
@@ -18,7 +18,7 @@ public class DeleteModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int Id { get; set; }
 
-    public OrderModel? Order { get; set; }
+    public FoodOrderModel? Order { get; set; }
 
     public async Task OnGet()
     {

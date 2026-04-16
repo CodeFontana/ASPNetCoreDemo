@@ -1,6 +1,6 @@
 ﻿namespace BlazorClientDemo.Models;
 
-public sealed class OrderCreateResultsModel
+public sealed class FoodOrderCreateResultsModel
 {
     public int Id { get; set; }
 }

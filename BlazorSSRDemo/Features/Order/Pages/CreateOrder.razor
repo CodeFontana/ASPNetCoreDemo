@@ -1,7 +1,7 @@
 ﻿@page "/order/create"
 @attribute [StreamRendering]
 @inject IFoodRepository foodData
-@inject IOrderRepository orderData
+@inject IFoodOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Create Order - BlazorSSR</PageTitle>
@@ -45,7 +45,7 @@
 
 @code {
     [SupplyParameterFromForm]
-    public OrderModel? Order { get; set; }
+    public FoodOrderModel? Order { get; set; }
 
     private IEnumerable<FoodModel> foodItems = [];
 

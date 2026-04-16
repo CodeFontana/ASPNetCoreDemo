@@ -1,7 +1,7 @@
 ﻿@page "/order/display/{Id:int}"
 @attribute [StreamRendering]
 @inject IFoodRepository foodData
-@inject IOrderRepository orderData
+@inject IFoodOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Display Order - BlazorSSR</PageTitle>
@@ -72,7 +72,7 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderModel? order;
+    private FoodOrderModel? order;
     private string? itemPurchased;
     private bool recordNotFound = false;
 
@@ -84,7 +84,7 @@ else
         updateModel ??= new();
         order = await orderData.GetOrderByIdAsync(Id);
 
-        if (order != null)
+        if (order is not null)
         {
             var food = await foodData.GetFoodAsync();
             itemPurchased = food.Where(x => x.Id == order.FoodId).FirstOrDefault()?.Title;

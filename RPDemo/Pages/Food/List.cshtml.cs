@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataLibrary.Data;
 using DataLibrary.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RPDemo.Pages.Food;
@@ -20,5 +21,11 @@ public class ListModel : PageModel
     public async Task OnGet()
     {
         Food = await _foodData.GetFoodAsync();
+    }
+
+    public async Task<IActionResult> OnPostDelete(int id)
+    {
+        await _foodData.DeleteFoodAsync(id);
+        return RedirectToPage();
     }
 }

@@ -3,7 +3,17 @@ var builder = DistributedApplication.CreateBuilder(args);
 var api = builder.AddProject<Projects.ApiDemo>("apidemo");
 
 builder.AddProject<Projects.BlazorClientDemo>("blazorclientdemo")
-    .WithReference(api);
+    .WithEndpoint(
+        "https",
+        endpoint =>
+        {
+            endpoint.UriScheme = "https";
+            endpoint.Transport = "http";
+            endpoint.Port = 5003;
+            endpoint.IsProxied = false;
+        })
+    .WithReference(api)
+    .WaitFor(api);
 
 builder.AddProject<Projects.BlazorServerDemo>("blazorserverdemo");
 

@@ -12,9 +12,9 @@ namespace RPDemo.Pages.Orders;
 public class CreateModel : PageModel
 {
     private readonly IFoodRepository _foodData;
-    private readonly IOrderRepository _orderData;
+    private readonly IFoodOrderRepository _orderData;
 
-    public CreateModel(IFoodRepository foodData, IOrderRepository orderData)
+    public CreateModel(IFoodRepository foodData, IFoodOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
@@ -23,7 +23,7 @@ public class CreateModel : PageModel
     public List<SelectListItem> FoodItems { get; set; } = [];
 
     [BindProperty]
-    public OrderModel Order { get; set; } = new();
+    public FoodOrderModel Order { get; set; } = new();
 
     public async Task OnGet()
     {

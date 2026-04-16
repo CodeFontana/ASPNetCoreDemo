@@ -1,7 +1,7 @@
 ﻿@page "/order/create"
 @rendermode InteractiveServer
 @inject IFoodRepository foodData
-@inject IOrderRepository orderData
+@inject IFoodOrderRepository orderData
 @inject NavigationManager navMan
 
 <PageTitle>Create Order - Blazor Server</PageTitle>
@@ -37,7 +37,7 @@
 </EditForm>
 
 @code {
-    private OrderModel order = new OrderModel();
+    private FoodOrderModel order = new();
     private IEnumerable<FoodModel> foodItems = [];
 
     protected override async Task OnParametersSetAsync()

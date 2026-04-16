@@ -64,12 +64,16 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Food.sql" />
-    <Build Include="dbo\Tables\Order.sql" />
+    <Build Include="dbo\Tables\FoodOrder.sql" />
     <Build Include="dbo\Stored Procedures\spFood_GetAll.sql" />
-    <Build Include="dbo\Stored Procedures\spOrders_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\spOrders_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\spOrders_UpdateName.sql" />
-    <Build Include="dbo\Stored Procedures\spOrders_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spFood_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spFood_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spFood_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spFoodOrders_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spFoodOrders_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spFoodOrders_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spFoodOrders_UpdateName.sql" />
+    <Build Include="dbo\Stored Procedures\spFoodOrders_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

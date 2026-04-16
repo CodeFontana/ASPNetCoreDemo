@@ -1,0 +1,78 @@
+@page "/food/edit/{Id:int}"
+@attribute [StreamRendering]
+@inject IFoodRepository foodData
+@inject NavigationManager navMan
+
+<PageTitle>Edit Menu Item - Blazor SSR</PageTitle>
+
+<h1>Edit Menu Item</h1>
+
+@if (_notFound)
+{
+    <h4>Item not found.</h4>
+}
+else if (FoodItem is not null)
+{
+    <EditForm Enhance FormName="editFood" Model="FoodItem" OnValidSubmit="() => HandleSubmitAsync()">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2" style="max-width: 400px;">
+            <label class="form-label">Title</label>
+            <InputText @bind-Value="FoodItem.Title" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 600px;">
+            <label class="form-label">Description</label>
+            <InputText @bind-Value="FoodItem.Description" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 150px;">
+            <label class="form-label">Price</label>
+            <InputNumber @bind-Value="FoodItem.Price" class="form-control form-control-sm" />
+        </div>
+        <button type="submit" class="btn btn-success btn-sm">Save</button>
+        <a href="food" class="btn btn-secondary btn-sm">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public FoodModel? FoodItem { get; set; }
+
+    private bool _notFound;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (FoodItem is null)
+        {
+            IEnumerable<FoodModel> allFood = await foodData.GetFoodAsync();
+            FoodModel? existing = allFood.FirstOrDefault(f => f.Id == Id);
+
+            if (existing is null)
+            {
+                _notFound = true;
+                return;
+            }
+
+            FoodItem = new FoodModel
+            {
+                Id = existing.Id,
+                Title = existing.Title,
+                Description = existing.Description,
+                Price = existing.Price
+            };
+        }
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        if (FoodItem is not null)
+        {
+            FoodItem.Id = Id;
+            await foodData.UpdateFoodAsync(FoodItem);
+            navMan.NavigateTo("food");
+        }
+    }
+}

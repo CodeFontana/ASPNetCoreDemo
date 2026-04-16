@@ -79,8 +79,8 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private OrderResultModel? orderInfo;
-    private OrderUpdateModel updateModel = new();
+    private FoodOrderResultModel? orderInfo;
+    private FoodOrderUpdateModel updateModel = new();
     private string? errorString;
     private bool confirmDelete = false;
 
@@ -90,7 +90,7 @@ else
 
         if (response.IsSuccessStatusCode)
         {
-            orderInfo = await response.Content.ReadFromJsonAsync<OrderResultModel>();
+            orderInfo = await response.Content.ReadFromJsonAsync<FoodOrderResultModel>();
             
             if (orderInfo is not null)
             {
@@ -123,7 +123,7 @@ else
 
         if (response.IsSuccessStatusCode)
         {
-            navMan.NavigateTo("food/list");
+            navMan.NavigateTo("food");
         }
         else
         {

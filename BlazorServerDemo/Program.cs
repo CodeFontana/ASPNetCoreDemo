@@ -17,7 +17,7 @@ builder.Services.AddResponseCompression();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IFoodOrderRepository, FoodOrderRepository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment() == false)

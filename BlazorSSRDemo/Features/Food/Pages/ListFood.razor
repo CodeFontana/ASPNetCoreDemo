@@ -1,37 +1,48 @@
 ﻿@page "/food"
 @attribute [StreamRendering]
 @inject IFoodRepository foodData
-@inject IOrderRepository orderData
+@inject NavigationManager navMan
 
-<PageTitle>Food List - BlazorSSR</PageTitle>
+<PageTitle>Menu - Blazor SSR</PageTitle>
 
-<h1>Food List</h1>
+<h1>Menu</h1>
 
 @if (foodList is null)
 {
-    <h4>Record loading...</h4>
+    <h4>Loading menu...</h4>
 }
 else
 {
-    <table class="table table-striped">
+    <table class="table table-striped table-sm align-middle" style="font-size: 0.9rem;">
         <thead class="thead-dark">
             <tr>
-                <th>Title</th>
+                <th>Item</th>
                 <th>Description</th>
-                <th>Price</th>
+                <th class="text-end">Price</th>
+                <th style="width: 80px;"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var food in foodList)
+            @foreach (FoodModel food in foodList)
             {
                 <tr>
                     <td>@food.Title</td>
                     <td>@food.Description</td>
-                    <td>@string.Format("{0:C}", food.Price)</td>
+                    <td class="text-end">@string.Format("{0:C}", food.Price)</td>
+                    <td class="text-nowrap">
+                        <a href="food/edit/@food.Id" class="btn btn-outline-primary btn-sm">Edit</a>
+                        <EditForm Enhance FormName="@($"delete-{food.Id}")" Model="food"
+                                  OnSubmit="() => DeleteItemAsync(food.Id)" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </EditForm>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <a href="order/create" class="btn btn-primary me-2">Place Order</a>
+    <a href="food/create" class="btn btn-outline-success">Add Menu Item</a>
 }
 
 @code {
@@ -40,5 +51,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         foodList = await foodData.GetFoodAsync();
+    }
+
+    private async Task DeleteItemAsync(int id)
+    {
+        await foodData.DeleteFoodAsync(id);
+        navMan.NavigateTo("food", forceLoad: true);
     }
 }

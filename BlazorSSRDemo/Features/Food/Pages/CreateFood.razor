@@ -1,0 +1,50 @@
+@page "/food/create"
+@attribute [StreamRendering]
+@inject IFoodRepository foodData
+@inject NavigationManager navMan
+
+<PageTitle>Add Menu Item - Blazor SSR</PageTitle>
+
+<h1>Add Menu Item</h1>
+
+@if (NewFood is not null)
+{
+    <EditForm Enhance FormName="addFood" Model="NewFood" OnValidSubmit="() => HandleSubmitAsync()">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2" style="max-width: 400px;">
+            <label class="form-label">Title</label>
+            <InputText @bind-Value="NewFood.Title" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 600px;">
+            <label class="form-label">Description</label>
+            <InputText @bind-Value="NewFood.Description" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 150px;">
+            <label class="form-label">Price</label>
+            <InputNumber @bind-Value="NewFood.Price" class="form-control form-control-sm" />
+        </div>
+        <button type="submit" class="btn btn-success btn-sm">Add Item</button>
+        <a href="food" class="btn btn-secondary btn-sm">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public FoodModel? NewFood { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NewFood ??= new();
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        if (NewFood is not null)
+        {
+            await foodData.CreateFoodAsync(NewFood);
+            navMan.NavigateTo("food");
+        }
+    }
+}

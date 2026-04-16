@@ -1,0 +1,48 @@
+@model IEnumerable<FoodOrderSummaryModel>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+@if (Model.Any() == false)
+{
+    <p>No orders have been placed yet.</p>
+    <a asp-action="Create" class="btn btn-primary">Place Order</a>
+}
+else
+{
+    <table class="table table-striped table-sm align-middle" style="font-size: 0.9rem;">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order Name</th>
+                <th>Meal</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end">Total</th>
+                <th>Date</th>
+                <th style="width: 120px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderName</td>
+                    <td>@order.FoodTitle</td>
+                    <td class="text-center">@order.Quantity</td>
+                    <td class="text-end">@string.Format("{0:C}", order.Total)</td>
+                    <td>@order.OrderDate.ToString("g")</td>
+                    <td class="text-nowrap">
+                        <a asp-action="Display" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm">View</a>
+                        <form asp-action="Delete" asp-route-id="@order.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Create" class="btn btn-primary">Place Order</a>
+}

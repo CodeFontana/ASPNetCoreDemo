@@ -1,17 +1,18 @@
 ﻿@page
 @model RPDemo.Pages.Food.ListModel
 @{
-    ViewData["Title"] = "Food List";
+    ViewData["Title"] = "Menu";
 }
 
-<h1>List</h1>
+<h1>Menu</h1>
 
-<table class="table table-striped">
+<table class="table table-striped table-sm align-middle" style="font-size: 0.9rem;">
     <thead class="thead-dark">
         <tr>
-            <th>Title</th>
+            <th>Item</th>
             <th>Description</th>
-            <th>Price</th>
+            <th class="text-end">Price</th>
+            <th style="width: 120px;"></th>
         </tr>
     </thead>
     <tbody>
@@ -20,8 +21,17 @@
             <tr>
                 <td>@food.Title</td>
                 <td>@food.Description</td>
-                <td>@string.Format("{0:C}", food.Price)</td>
+                <td class="text-end">@string.Format("{0:C}", food.Price)</td>
+                <td class="text-nowrap">
+                    <a asp-page="./Edit" asp-route-id="@food.Id" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@food.Id" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a asp-page="/Orders/Create" class="btn btn-primary me-2">Place Order</a>
+<a asp-page="./Create" class="btn btn-outline-success">Add Menu Item</a>

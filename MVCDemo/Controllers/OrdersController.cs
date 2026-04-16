@@ -13,23 +13,24 @@ namespace MVCDemo.Controllers;
 public class OrdersController : Controller
 {
     private readonly IFoodRepository _foodData;
-    private readonly IOrderRepository _orderData;
+    private readonly IFoodOrderRepository _orderData;
 
-    public OrdersController(IFoodRepository foodData, IOrderRepository orderData)
+    public OrdersController(IFoodRepository foodData, IFoodOrderRepository orderData)
     {
         _foodData = foodData;
         _orderData = orderData;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        IEnumerable<FoodOrderSummaryModel> orders = await _orderData.GetAllOrdersAsync();
+        return View(orders);
     }
 
     public async Task<IActionResult> Create()
     {
         IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
-        OrderCreateModel model = new();
+        FoodOrderCreateModel model = new();
 
         food.ToList().ForEach(x =>
         {
@@ -40,7 +41,7 @@ public class OrdersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(OrderModel order)
+    public async Task<IActionResult> Create(FoodOrderModel order)
     {
         if (ModelState.IsValid == false)
         {
@@ -56,12 +57,12 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Display(int id)
     {
-        OrderDisplayModel displayOrder = new()
+        FoodOrderDisplayModel displayOrder = new()
         {
             Order = await _orderData.GetOrderByIdAsync(id)
         };
 
-        if (displayOrder.Order != null)
+        if (displayOrder.Order is not null)
         {
             IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
             displayOrder.ItemPurchased = food
@@ -82,12 +83,12 @@ public class OrdersController : Controller
 
     public async Task<IActionResult> Delete(int id)
     {
-        var order = await _orderData.GetOrderByIdAsync(id);
+        FoodOrderModel? order = await _orderData.GetOrderByIdAsync(id);
         return View(order);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(OrderModel order)
+    public async Task<IActionResult> Delete(FoodOrderModel order)
     {
         await _orderData.DeleteOrderAsync(order.Id);
         return RedirectToAction("Create");

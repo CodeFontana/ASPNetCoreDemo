@@ -9,9 +9,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddControllersWithViews();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddSingleton<IDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IFoodRepository, FoodRepository>();
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IFoodOrderRepository, FoodOrderRepository>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

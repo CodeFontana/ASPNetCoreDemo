@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataLibrary.Models;
 
-public sealed class OrderModel
+public sealed class FoodOrderModel
 {
     public int Id { get; set; }
 

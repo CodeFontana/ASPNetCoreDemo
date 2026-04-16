@@ -1,0 +1,72 @@
+@page "/food/edit/{Id:int}"
+@rendermode InteractiveServer
+@inject IFoodRepository foodData
+@inject NavigationManager navMan
+
+<PageTitle>Edit Menu Item - Blazor Server</PageTitle>
+
+<h1>Edit Menu Item</h1>
+
+@if (_notFound)
+{
+    <h4>Item not found.</h4>
+}
+else if (_foodItem is not null)
+{
+    <EditForm Model="@_foodItem" OnValidSubmit="HandleSubmitAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2" style="max-width: 400px;">
+            <label class="form-label">Title</label>
+            <InputText @bind-Value="_foodItem.Title" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 600px;">
+            <label class="form-label">Description</label>
+            <InputText @bind-Value="_foodItem.Description" class="form-control form-control-sm" />
+        </div>
+        <div class="mb-2" style="max-width: 150px;">
+            <label class="form-label">Price</label>
+            <InputNumber @bind-Value="_foodItem.Price" class="form-control form-control-sm" />
+        </div>
+        <button type="submit" class="btn btn-success btn-sm">Save</button>
+        <a href="food" class="btn btn-secondary btn-sm">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private FoodModel? _foodItem;
+    private bool _notFound;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IEnumerable<FoodModel> allFood = await foodData.GetFoodAsync();
+        FoodModel? existing = allFood.FirstOrDefault(f => f.Id == Id);
+
+        if (existing is null)
+        {
+            _notFound = true;
+            return;
+        }
+
+        _foodItem = new FoodModel
+        {
+            Id = existing.Id,
+            Title = existing.Title,
+            Description = existing.Description,
+            Price = existing.Price
+        };
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        if (_foodItem is not null)
+        {
+            await foodData.UpdateFoodAsync(_foodItem);
+            navMan.NavigateTo("food");
+        }
+    }
+}

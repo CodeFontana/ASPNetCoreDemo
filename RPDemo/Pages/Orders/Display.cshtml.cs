@@ -11,10 +11,10 @@ namespace RPDemo.Pages.Orders;
 
 public class DisplayModel : PageModel
 {
-    private readonly IOrderRepository _orderData;
+    private readonly IFoodOrderRepository _orderData;
     private readonly IFoodRepository _foodData;
 
-    public DisplayModel(IOrderRepository orderData, IFoodRepository foodData)
+    public DisplayModel(IFoodOrderRepository orderData, IFoodRepository foodData)
     {
         _orderData = orderData;
         _foodData = foodData;
@@ -24,16 +24,16 @@ public class DisplayModel : PageModel
     public int Id { get; set; }
 
     [BindProperty]
-    public OrderUpdateModel UpdateModel { get; set; } = new();
+    public FoodOrderUpdateModel UpdateModel { get; set; } = new();
 
-    public OrderModel? Order { get; set; }
+    public FoodOrderModel? Order { get; set; }
     public string? ItemPurchased { get; set; }
 
     public async Task<IActionResult> OnGet()
     {
         Order = await _orderData.GetOrderByIdAsync(Id);
 
-        if (Order != null)
+        if (Order is not null)
         {
             IEnumerable<FoodModel> food = await _foodData.GetFoodAsync();
             ItemPurchased = food.Where(x => x.Id == Order.FoodId).FirstOrDefault()?.Title;

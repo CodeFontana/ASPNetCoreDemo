@@ -1,0 +1,38 @@
+@page "/food/create"
+@rendermode InteractiveServer
+@inject IFoodRepository foodData
+@inject NavigationManager navMan
+
+<PageTitle>Add Menu Item - Blazor Server</PageTitle>
+
+<h1>Add Menu Item</h1>
+
+<EditForm Model="@_newFood" OnValidSubmit="HandleSubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2" style="max-width: 400px;">
+        <label class="form-label">Title</label>
+        <InputText @bind-Value="_newFood.Title" class="form-control form-control-sm" />
+    </div>
+    <div class="mb-2" style="max-width: 600px;">
+        <label class="form-label">Description</label>
+        <InputText @bind-Value="_newFood.Description" class="form-control form-control-sm" />
+    </div>
+    <div class="mb-2" style="max-width: 150px;">
+        <label class="form-label">Price</label>
+        <InputNumber @bind-Value="_newFood.Price" class="form-control form-control-sm" />
+    </div>
+    <button type="submit" class="btn btn-success btn-sm">Add Item</button>
+    <a href="food" class="btn btn-secondary btn-sm">Cancel</a>
+</EditForm>
+
+@code {
+    private FoodModel _newFood = new();
+
+    private async Task HandleSubmitAsync()
+    {
+        await foodData.CreateFoodAsync(_newFood);
+        navMan.NavigateTo("food");
+    }
+}
