@@ -1,0 +1,55 @@
+.home-hero {
+    border-bottom: 1px solid var(--bs-border-color);
+    margin-bottom: 2rem;
+}
+
+.home-eyebrow {
+    color: var(--bs-primary);
+    letter-spacing: 0.06em;
+}
+
+.home-lead {
+    max-width: 60ch;
+}
+
+.home-feature-card {
+    border-color: color-mix(in srgb, var(--bs-border-color) 55%, var(--bs-body-color));
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.10),
+        0 12px 28px rgba(15, 23, 42, 0.16);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.home-feature-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--bs-primary) 50%, var(--bs-border-color));
+    box-shadow:
+        0 2px 4px rgba(15, 23, 42, 0.14),
+        0 18px 40px color-mix(in srgb, var(--bs-primary) 22%, rgba(15, 23, 42, 0.20));
+}
+
+[data-bs-theme="dark"] .home-feature-card {
+    border-color: var(--bs-border-color);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.30),
+        0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+[data-bs-theme="dark"] .home-feature-card:hover {
+    border-color: color-mix(in srgb, var(--bs-primary) 55%, var(--bs-border-color));
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.35),
+        0 8px 24px color-mix(in srgb, var(--bs-primary) 22%, transparent);
+}
+
+.home-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background-color: color-mix(in srgb, var(--bs-primary) 15%, transparent);
+    color: var(--bs-primary);
+    font-size: 1.25rem;
+}

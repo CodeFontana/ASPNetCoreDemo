@@ -1,54 +1,93 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    string? currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    string? currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string NavClass(string controller, string? action = null)
+    {
+        bool isActive = string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase)
+            && (action is null || string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase));
+        return isActive ? "nav-link active" : "nav-link";
+    }
+
+    string homeNavClass = NavClass("Home", "Index");
+    string menuNavClass = NavClass("Food");
+    string ordersNavClass = NavClass("Orders", "Index");
+    string createOrderNavClass = NavClass("Orders", "Create");
+
+    MVCDemo.Models.ThemePickerModel themePickerModel = new() { Class = "me-2" };
+}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>@ViewData["Title"] - MVCDemo</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    @* Apply the saved theme synchronously, before paint, to avoid FOUC. *@
+    <script src="~/js/theme-picker.js" asp-append-version="true"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@@300;400;500;600;700;800&family=JetBrains+Mono:wght@@400;500;600&display=swap" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVCDemo.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="app-shell">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVCDemo</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+        <nav class="navbar navbar-expand-md fixed-top app-navbar shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-bricks fs-4 text-primary"></i>
+                    <span>MVCDemo</span>
+                </a>
+
+                <div class="d-flex align-items-center order-md-last">
+                    <partial name="_ThemePicker" model="themePickerModel" />
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto mb-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="@homeNavClass" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Index">Menu</a>
+                            <a class="@menuNavClass" asp-controller="Food" asp-action="Index">Menu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                            <a class="@ordersNavClass" asp-controller="Orders" asp-action="Index">Orders</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Create">Create Order</a>
+                            <a class="@createOrderNavClass" asp-controller="Orders" asp-action="Create">Create Order</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - MVCDemo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <main role="main" class="container" style="padding-top: 4.5rem;">
+        @RenderBody()
+    </main>
+
+    <footer class="app-footer mt-5">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>&copy; @DateTime.Now.Year &middot; MVCDemo</span>
+            <a class="text-decoration-none" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

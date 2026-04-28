@@ -1,0 +1,72 @@
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<div class="dropdown app-theme-picker @Class">
+    <button class="btn btn-link p-1 d-flex align-items-center gap-2 app-theme-picker-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            aria-label="Toggle theme">
+        <i class="bi bi-circle-half fs-5" data-theme-icon></i>
+        @if (ShowLabel)
+        {
+            <span class="d-none d-lg-inline" data-theme-label>Auto</span>
+        }
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-theme-value="light">
+                <i class="bi bi-sun-fill"></i> Light
+                <i class="bi bi-check-lg ms-auto opacity-0" data-theme-active></i>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-theme-value="dark">
+                <i class="bi bi-moon-stars-fill"></i> Dark
+                <i class="bi bi-check-lg ms-auto opacity-0" data-theme-active></i>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-theme-value="auto">
+                <i class="bi bi-circle-half"></i> Auto
+                <i class="bi bi-check-lg ms-auto" data-theme-active></i>
+            </button>
+        </li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool ShowLabel { get; set; } = true;
+
+    private IJSObjectReference? _jsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_jsModule is null)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import",
+                "./Features/Components/ThemePicker.razor.js");
+        }
+
+        if (firstRender)
+        {
+            await _jsModule.InvokeVoidAsync("onLoad");
+        }
+
+        await _jsModule.InvokeVoidAsync("onUpdate");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule is not null)
+        {
+            await _jsModule.InvokeVoidAsync("onDispose");
+            await _jsModule.DisposeAsync();
+        }
+    }
+}

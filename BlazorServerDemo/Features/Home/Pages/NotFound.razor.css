@@ -1,0 +1,11 @@
+.not-found-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    background-color: color-mix(in srgb, var(--bs-primary) 15%, transparent);
+    color: var(--bs-primary);
+    font-size: 2rem;
+}
