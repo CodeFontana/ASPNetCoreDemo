@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Dapper;
 
 namespace DataLibrary.DataAccess;
+
 public interface IDataAccess
 {
     void ExecuteAndForget(string storedProcedure, DynamicParameters parameters, IDbConnection connection);
