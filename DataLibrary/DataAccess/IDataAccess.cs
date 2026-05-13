@@ -25,6 +25,10 @@ public interface IDataAccess
     Task<IEnumerable<T>> QueryMultipleAsync<T, U>(string storedProcedure, U parameters, string connectionString, ushort? commandTimeout = 180);
     Task<IEnumerable<T>> QueryMultipleAsync<T>(string storedProcedure, IDbConnection connection, ushort? commandTimeout = 180);
     Task<IEnumerable<T>> QueryMultipleAsync<T>(string storedProcedure, string connectionString, ushort? commandTimeout = 180);
+    IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T>(string storedProcedure, string connectionString, ushort? commandTimeout = 180, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T>(string storedProcedure, IDbConnection connection, ushort? commandTimeout = 180, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T, U>(string storedProcedure, U parameters, string connectionString, ushort? commandTimeout = 180, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T, U>(string storedProcedure, U parameters, IDbConnection connection, ushort? commandTimeout = 180, CancellationToken cancellationToken = default);
     Task<T> QuerySingleAsync<T, U>(string storedProcedure, U parameters, IDbConnection connection, ushort? commandTimeout = 180);
     Task<T> QuerySingleAsync<T, U>(string storedProcedure, U parameters, string connectionString, ushort? commandTimeout = 180);
     Task<T?> QuerySingleOrDefaultAsync<T, U>(string storedProcedure, U parameters, IDbConnection connection, ushort? commandTimeout = 180);

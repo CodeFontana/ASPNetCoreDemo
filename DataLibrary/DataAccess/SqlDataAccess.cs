@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using Dapper;
@@ -102,6 +104,104 @@ public sealed class SqlDataAccess : IDataAccess
         if (!callerOpenedConnection && connection.State == ConnectionState.Open)
             connection.Close();
         return result;
+    }
+
+    public IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T>(string storedProcedure, string connectionString, ushort? commandTimeout = 180, CancellationToken cancellationToken = default)
+    {
+        return EnumerateFromConnectionString(cancellationToken);
+
+        async IAsyncEnumerable<T> EnumerateFromConnectionString([EnumeratorCancellation] CancellationToken ct)
+        {
+            await using SqlConnection connection = new(connectionString);
+            await connection.OpenAsync(ct);
+            IAsyncEnumerable<T> rows = connection.QueryUnbufferedAsync<T>(
+                storedProcedure,
+                commandType: CommandType.StoredProcedure,
+                commandTimeout: commandTimeout);
+            await foreach (T row in rows.WithCancellation(ct))
+            {
+                yield return row;
+            }
+        }
+    }
+
+    public IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T>(string storedProcedure, IDbConnection connection, ushort? commandTimeout = 180, CancellationToken cancellationToken = default)
+    {
+        return EnumerateFromConnection(cancellationToken);
+
+        async IAsyncEnumerable<T> EnumerateFromConnection([EnumeratorCancellation] CancellationToken ct)
+        {
+            if (connection is not DbConnection dbConnection)
+                throw new ArgumentException("QueryMultipleUnbufferedAsync requires a DbConnection (for example SqlConnection).", nameof(connection));
+
+            bool callerOpenedConnection = await OpenConnectionAsync(connection);
+            try
+            {
+                IAsyncEnumerable<T> rows = dbConnection.QueryUnbufferedAsync<T>(
+                    storedProcedure,
+                    commandType: CommandType.StoredProcedure,
+                    commandTimeout: commandTimeout);
+                await foreach (T row in rows.WithCancellation(ct))
+                {
+                    yield return row;
+                }
+            }
+            finally
+            {
+                if (!callerOpenedConnection && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+        }
+    }
+
+    public IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T, U>(string storedProcedure, U parameters, string connectionString, ushort? commandTimeout = 180, CancellationToken cancellationToken = default)
+    {
+        return EnumerateFromConnectionString(cancellationToken);
+
+        async IAsyncEnumerable<T> EnumerateFromConnectionString([EnumeratorCancellation] CancellationToken ct)
+        {
+            await using SqlConnection connection = new(connectionString);
+            await connection.OpenAsync(ct);
+            IAsyncEnumerable<T> rows = connection.QueryUnbufferedAsync<T>(
+                storedProcedure,
+                parameters,
+                commandType: CommandType.StoredProcedure,
+                commandTimeout: commandTimeout);
+            await foreach (T row in rows.WithCancellation(ct))
+            {
+                yield return row;
+            }
+        }
+    }
+
+    public IAsyncEnumerable<T> QueryMultipleUnbufferedAsync<T, U>(string storedProcedure, U parameters, IDbConnection connection, ushort? commandTimeout = 180, CancellationToken cancellationToken = default)
+    {
+        return EnumerateFromConnection(cancellationToken);
+
+        async IAsyncEnumerable<T> EnumerateFromConnection([EnumeratorCancellation] CancellationToken ct)
+        {
+            if (connection is not DbConnection dbConnection)
+                throw new ArgumentException("QueryMultipleUnbufferedAsync requires a DbConnection (for example SqlConnection).", nameof(connection));
+
+            bool callerOpenedConnection = await OpenConnectionAsync(connection);
+            try
+            {
+                IAsyncEnumerable<T> rows = dbConnection.QueryUnbufferedAsync<T>(
+                    storedProcedure,
+                    parameters,
+                    commandType: CommandType.StoredProcedure,
+                    commandTimeout: commandTimeout);
+                await foreach (T row in rows.WithCancellation(ct))
+                {
+                    yield return row;
+                }
+            }
+            finally
+            {
+                if (!callerOpenedConnection && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+        }
     }
 
     public async Task<int> ExecuteAsync(string storedProcedure, DynamicParameters parameters, string connectionString, ushort? commandTimeout = 180)
